@@ -8,69 +8,69 @@ import (
 	tfaddr "github.com/hashicorp/terraform-registry-address"
 )
 
-type TerraformDepType int
+type TerraformModSrcType int
 
 const (
-	TerraformDepUnknown TerraformDepType = iota
-	TerraformDepLocal
-	TerraformDepRegistry
-	TerraformDepGit
-	TerraformDepHG
-	TerraformDepS3
-	TerraformDepGCS
-	TerraformDepHTTP
+	TerraformModSrcUnknown TerraformModSrcType = iota
+	TerraformModSrcLocal
+	TerraformModSrcRegistry
+	TerraformModSrcGit
+	TerraformModSrcHG
+	TerraformModSrcS3
+	TerraformModSrcGCS
+	TerraformModSrcHTTP
 )
 
-func (typ TerraformDepType) String() string {
+func (typ TerraformModSrcType) String() string {
 	switch typ {
-	case TerraformDepLocal:
+	case TerraformModSrcLocal:
 		return "local"
-	case TerraformDepRegistry:
+	case TerraformModSrcRegistry:
 		return "registry"
-	case TerraformDepGit:
+	case TerraformModSrcGit:
 		return "git"
-	case TerraformDepS3:
+	case TerraformModSrcS3:
 		return "s3"
-	case TerraformDepGCS:
+	case TerraformModSrcGCS:
 		return "gcs"
-	case TerraformDepHTTP:
+	case TerraformModSrcHTTP:
 		return "http"
 	default:
 		return "unknown"
 	}
 }
 
-// GetTerraformDepType determines the type of the module dependency based on the source string. Terraform determines how
+// GetTerraformModSrcType determines the type of the module dependency based on the source string. Terraform determines how
 // to fetch dependencies based on the following logic:
 // - If it starts with ./ or ../, then it's a local path reference.
 // - If it can be parsed as a module registry address, then it's referencing a module registry.
 // - Otherwise, use go-getter.
 // Therefore, we implement the same logic here to determine the source address type for the Terraform module.
-func GetTerraformDepType(source string) TerraformDepType {
+func GetTerraformModSrcType(source string) TerraformModSrcType {
 	if isLocalModuleSource(source) {
-		return TerraformDepLocal
+		return TerraformModSrcLocal
 	}
 
 	if isRegistryModuleSource(source) {
-		return TerraformDepRegistry
+		return TerraformModSrcRegistry
 	}
 
 	switch getGoGetterSourceType(source) {
 	case "git":
-		return TerraformDepGit
+		return TerraformModSrcGit
 	case "hg":
-		return TerraformDepHG
+		return TerraformModSrcHG
 	case "s3":
-		return TerraformDepS3
+		return TerraformModSrcS3
 	case "gcs":
-		return TerraformDepGCS
+		return TerraformModSrcGCS
 	case "http", "https":
-		return TerraformDepHTTP
+		return TerraformModSrcHTTP
 	case "file":
-		return TerraformDepLocal
+		return TerraformModSrcLocal
 	}
 
-	return TerraformDepUnknown
+	return TerraformModSrcUnknown
 }
 
 // isLocalModuleSource returns true if the module source is a local path, which always starts with ./ or ../ (or .\ or
