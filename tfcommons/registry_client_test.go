@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/fensak-io/go-commons/tfcommons"
+	"github.com/fensak-io/gostd/tfcommons"
 )
 
 var _ = Describe("RegistryClient", func() {

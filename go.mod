@@ -1,4 +1,4 @@
-module github.com/fensak-io/go-commons
+module github.com/fensak-io/gostd
 
 go 1.19
 
