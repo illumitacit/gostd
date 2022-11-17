@@ -42,6 +42,8 @@ jobs:
         run: |
           go install github.com/onsi/ginkgo/v2/ginkgo@v2.5.0
           ginkgo run --junit-report ginkgo_report.xml ./...
+        env:
+          FENSAK_GOSTD_TFC_TEST_TOKEN: ${{ secrets.FENSAK_GOSTD_TFC_TEST_TOKEN }}
 
       - name: report
         uses: mikepenz/action-junit-report@v3

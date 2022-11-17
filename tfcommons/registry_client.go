@@ -30,9 +30,28 @@ type RegistryClient struct {
 	httpc *resty.Client
 }
 
+// NewRegistryClient initializes a new client for accessing the Terraform registry. This will use the service discovery
+// protocol (described in https://developer.hashicorp.com/terraform/internals/remote-service-discovery) to identify
+// where to fetch Terraform resources.
+// This also takes advantage of the CLI configuration (described in
+// https://developer.hashicorp.com/terraform/cli/config/config-file#locations) to look for credentials for accessing
+// private registries. Refer to the documentation for [LoadCredentialConfig] for information on how the credential
+// config is loaded.
 func NewRegistryClient(host string) (*RegistryClient, error) {
 	httpc := resty.New()
-	// TODO: handle authentication by loading terraformrc
+
+	creds, err := LoadCredentialConfig()
+	if err != nil {
+		return nil, err
+	}
+	if creds != nil {
+		hostCred, hasCred := creds.credentialMap[host]
+		if hasCred {
+			httpc.SetAuthToken(hostCred.Token)
+		}
+	}
+	// TODO: add support for env var creds:
+	// https://developer.hashicorp.com/terraform/cli/config/config-file#environment-variable-credentials
 
 	var sdResp ServiceDiscoveryResp
 	sdURL := url.URL{
