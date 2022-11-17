@@ -38,6 +38,16 @@ var _ = Describe("Terraform", func() {
 				})
 			})
 
+			Context("with exclude path regex", func() {
+				It("should not find any modules", func() {
+					modulePaths, err := tfcommons.FindTerraformModules(testFilePath, []string{`^.*/nested`})
+					Ω(err).NotTo(HaveOccurred())
+					Ω(modulePaths).To(Equal([]string{
+						"fixtures/flat",
+						"fixtures/flat-non-main",
+					}))
+				})
+			})
 		})
 	})
 })
