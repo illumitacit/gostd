@@ -7,6 +7,11 @@ type ServiceDiscoveryResp struct {
 	ProvidersV1 *string       `json:"providers.v1,omitempty"`
 }
 
+// ServiceDiscoveryFensakExtResp represents a response from the Terraform Fensak Extensions service discovery protocol.
+type ServiceDiscoveryFensakExtResp struct {
+	ProvenanceV0 *string `json:"provenance.v0,omitempty"`
+}
+
 // LoginService contains the oauth client information that the Terraform CLI can use to interact with the login protocol
 // of the registry.
 type LoginService struct {
