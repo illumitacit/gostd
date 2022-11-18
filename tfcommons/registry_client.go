@@ -89,9 +89,14 @@ func (regClt *RegistryClient) GetVersions(module tfaddr.ModulePackage) (*ModuleV
 	versionsURL.Path = path.Join(versionsURL.Path, module.Namespace, module.Name, module.TargetSystem, "versions")
 
 	var resp ModuleVersionsResp
-	if _, err := regClt.httpc.R().SetResult(&resp).Get(versionsURL.String()); err != nil {
+	r, err := regClt.httpc.R().SetResult(&resp).Get(versionsURL.String())
+	if err != nil {
 		return nil, err
 	}
+	if r.StatusCode() != http.StatusOK {
+		return nil, fmt.Errorf("Error fetching versions: %s", r.Body())
+	}
+
 	// For forward compatibility, the registry uses a weird response format for the versions endpoint where it returns a
 	// singleton list for the versions object. So here we just automatically pull out the first element to return the
 	// user friendly representation.
@@ -104,10 +109,14 @@ func (regClt *RegistryClient) DownloadToPath(module tfaddr.ModulePackage, versio
 	downloadURL := *regClt.ModulesEndpoint
 	downloadURL.Path = path.Join(downloadURL.Path, module.Namespace, module.Name, module.TargetSystem, version, "download")
 
-	resp, err := regClt.httpc.R().Get(downloadURL.String())
+	r, err := regClt.httpc.R().Get(downloadURL.String())
 	if err != nil {
 		return err
 	}
-	getURL := resp.Header().Get(tfSrcHdrKey)
+	if r.StatusCode() != http.StatusNoContent {
+		return fmt.Errorf("Error getting download URL: %s", r.Body())
+	}
+
+	getURL := r.Header().Get(tfSrcHdrKey)
 	return getter.GetAny(destDir, getURL)
 }

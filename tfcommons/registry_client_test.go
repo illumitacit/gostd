@@ -68,7 +68,7 @@ var _ = Describe("RegistryClient", func() {
 		})
 	})
 
-	Describe("with private registry", func() {
+	Describe("with private registry (authenticated)", func() {
 		token := os.Getenv("FENSAK_GOSTD_TFC_TEST_TOKEN")
 
 		var originalTFCCfgPath string
@@ -138,6 +138,8 @@ var _ = Describe("RegistryClient", func() {
 					"0.0.5",
 					"0.0.6",
 					"0.0.6-alpha.1",
+					"0.0.7",
+					"0.0.8",
 				}))
 			})
 		})
@@ -163,6 +165,47 @@ var _ = Describe("RegistryClient", func() {
 			})
 		})
 	})
+
+	Describe("with private registry (unauthenticated)", func() {
+		Context("initializing base client", func() {
+			It("should work without error", func() {
+				clt, err := tfcommons.NewRegistryClient(privateRegistryHost)
+				Ω(err).ShouldNot(HaveOccurred())
+				Ω(clt.ModulesEndpoint).ShouldNot(BeNil())
+				Ω(clt.ModulesEndpoint.String()).Should(Equal(
+					fmt.Sprintf("https://%s/api/registry/v1/modules/", privateRegistryHost),
+				))
+			})
+		})
+
+		Context("fetching versions", func() {
+			It("should have error", func() {
+				clt, err := tfcommons.NewRegistryClient(privateRegistryHost)
+				Ω(err).ShouldNot(HaveOccurred())
+				Ω(clt.ModulesEndpoint).ShouldNot(BeNil())
+
+				_, getErr := clt.GetVersions(privateRegTestModule)
+				Ω(getErr).Should(HaveOccurred())
+			})
+		})
+
+		Context("downloading module", func() {
+			It("should have error", func() {
+				clt, err := tfcommons.NewRegistryClient(privateRegistryHost)
+				Ω(err).ShouldNot(HaveOccurred())
+				Ω(clt.ModulesEndpoint).ShouldNot(BeNil())
+
+				tmpDir, err := os.MkdirTemp("", "")
+				Ω(err).ShouldNot(HaveOccurred())
+				defer os.RemoveAll(tmpDir)
+				destDir := filepath.Join(tmpDir, "tf")
+
+				dlErr := clt.DownloadToPath(privateRegTestModule, "0.0.5", destDir)
+				Ω(dlErr).Should(HaveOccurred())
+			})
+		})
+	})
+
 })
 
 const (
