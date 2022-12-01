@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/terraform-registry-address v0.1.0
 	github.com/in-toto/in-toto-golang v0.5.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/onsi/ginkgo/v2 v2.5.0
+	github.com/onsi/ginkgo/v2 v2.5.1
 	github.com/onsi/gomega v1.24.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.14.0
