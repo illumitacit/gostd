@@ -17,14 +17,14 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@6edd4406fa81c3da01a34fa6f6343087c207a568 # v3.5.0
         with:
           go-version: 1.19
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@0ad9a0988b3973e851ab0a07adf248ec2e100376 # v3.3.1
         with:
           version: v1.50.1
 
@@ -32,11 +32,11 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@6edd4406fa81c3da01a34fa6f6343087c207a568 # v3.5.0
         with:
           go-version: 1.19
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
 
       - name: run tests
         run: |
@@ -46,7 +46,7 @@ jobs:
           FENSAK_GOSTD_TFC_TEST_TOKEN: ${{ secrets.FENSAK_GOSTD_TFC_TEST_TOKEN }}
 
       - name: report
-        uses: mikepenz/action-junit-report@v3
+        uses: mikepenz/action-junit-report@c06eeb43cf77da3d290b179c834b2d8725177971 # v3.7.0
         if: always()
         with:
           report_paths: ginkgo_report.xml
