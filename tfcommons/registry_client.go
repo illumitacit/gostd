@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/go-resty/resty/v2"
-	getter "github.com/hashicorp/go-getter"
+	getter "github.com/hashicorp/go-getter/v2"
 	tfaddr "github.com/hashicorp/terraform-registry-address"
 )
 
