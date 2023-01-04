@@ -1,6 +1,7 @@
 package tfcommons
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -8,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/go-resty/resty/v2"
-	getter "github.com/hashicorp/go-getter"
+	getter "github.com/hashicorp/go-getter/v2"
 	tfaddr "github.com/hashicorp/terraform-registry-address"
 )
 
@@ -118,5 +119,15 @@ func (regClt *RegistryClient) DownloadToPath(module tfaddr.ModulePackage, versio
 	}
 
 	getURL := r.Header().Get(tfSrcHdrKey)
-	return getter.GetAny(destDir, getURL)
+	clt := &getter.Client{
+		Getters:       getAllGetters(),
+		Decompressors: getter.Decompressors,
+	}
+	req := &getter.Request{
+		Src:     getURL,
+		Dst:     destDir,
+		GetMode: getter.ModeAny,
+	}
+	_, getErr := clt.Get(context.TODO(), req)
+	return getErr
 }

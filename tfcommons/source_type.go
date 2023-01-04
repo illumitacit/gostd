@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	getter "github.com/hashicorp/go-getter"
+	gcsgetter "github.com/hashicorp/go-getter/gcs/v2"
+	s3getter "github.com/hashicorp/go-getter/s3/v2"
+	getter "github.com/hashicorp/go-getter/v2"
 	tfaddr "github.com/hashicorp/terraform-registry-address"
 )
 
@@ -55,19 +57,22 @@ func GetTerraformModSrcType(source string) TerraformModSrcType {
 		return TerraformModSrcRegistry
 	}
 
-	switch getGoGetterSourceType(source) {
-	case "git":
+	g := getGoGetterSourceType(source)
+	switch t := g.(type) {
+	case *getter.GitGetter:
 		return TerraformModSrcGit
-	case "hg":
+	case *getter.HgGetter:
 		return TerraformModSrcHG
-	case "s3":
+	case *s3getter.Getter:
 		return TerraformModSrcS3
-	case "gcs":
+	case *gcsgetter.Getter:
 		return TerraformModSrcGCS
-	case "http", "https":
+	case *getter.HttpGetter:
 		return TerraformModSrcHTTP
-	case "file":
+	case *getter.FileGetter:
 		return TerraformModSrcLocal
+	default:
+		fmt.Printf("WTF!!! %v", t)
 	}
 
 	return TerraformModSrcUnknown
@@ -87,15 +92,30 @@ func isRegistryModuleSource(source string) bool {
 	return err == nil
 }
 
-func getGoGetterSourceType(source string) string {
-	detected, err := getter.Detect(source, "", getter.Detectors)
-	if err != nil {
-		return ""
+func getGoGetterSourceType(source string) getter.Getter {
+	req := &getter.Request{
+		Src:     source,
+		Dst:     "",
+		GetMode: getter.ModeAny,
 	}
-	for key := range getter.Getters {
-		if strings.HasPrefix(detected, fmt.Sprintf("%s::", key)) || strings.HasPrefix(detected, fmt.Sprintf("%s://", key)) {
-			return key
+	for _, g := range getAllGetters() {
+		detected, err := getter.Detect(req, g)
+		if err != nil {
+			return nil
+		}
+		if detected {
+			return g
 		}
 	}
-	return ""
+	return nil
+}
+
+func getAllGetters() []getter.Getter {
+	return append(
+		[]getter.Getter{
+			new(s3getter.Getter),
+			new(gcsgetter.Getter),
+		},
+		getter.Getters...,
+	)
 }
