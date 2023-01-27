@@ -14,7 +14,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type SubClient[T proto.Message] struct {
+type SubClient struct {
 	subscription *pubsub.Subscription
 
 	logger     *zap.SugaredLogger
@@ -23,18 +23,18 @@ type SubClient[T proto.Message] struct {
 }
 
 // NewSubClient returns an initialized subscriber client for the configured broker from the given application config.
-func NewSubClient[T proto.Message](logger *zap.SugaredLogger, broker *Broker, ctx context.Context) (*SubClient[T], error) {
+func NewSubClient(logger *zap.SugaredLogger, broker *Broker, ctx context.Context) (*SubClient, error) {
 	switch broker.Engine {
 	case "azuresb":
-		return newAzureSBReceiverClient[T](logger, broker, ctx)
+		return newAzureSBReceiverClient(logger, broker, ctx)
 	case "rabbitmq":
-		return newRabbitMQSubscriberClient[T](logger, broker, ctx)
+		return newRabbitMQSubscriberClient(logger, broker, ctx)
 	}
 	return nil, fmt.Errorf("Unknown engine")
 }
 
 // Close will close all the associated connections of the given publisher client.
-func (clt *SubClient[T]) Close() error {
+func (clt *SubClient) Close() error {
 	if clt == nil {
 		return nil
 	}
@@ -66,35 +66,34 @@ func (clt *SubClient[T]) Close() error {
 // ReceiveTask will pull a task from the subscription channel and attempt to decode the received message into a task.
 // Note that this will block the thread if there are no messages available in the topic.
 // IMPORTANT: The caller must acknowledge the message once the task is successfully processed, either using Ack or Nack.
-func (clt *SubClient[T]) ReceiveTask(ctx context.Context) (*T, *pubsub.Message, error) {
+func (clt *SubClient) ReceiveTask(ctx context.Context, taskPtr proto.Message) (*pubsub.Message, error) {
 	msg, err := clt.subscription.Receive(ctx)
 	if err != nil {
 		// TODO: return as fatal error
-		return nil, nil, err
+		return nil, err
 	}
 
 	msgType, hasType := msg.Metadata["type"]
 	if !hasType {
 		msg.Nack()
-		return nil, nil, fmt.Errorf("Message has unknown type")
+		return nil, fmt.Errorf("Message has unknown type")
 	}
 
 	if msgType != "Task" {
 		msg.Nack()
-		return nil, nil, fmt.Errorf("Message has unknown type")
+		return nil, fmt.Errorf("Message has unknown type")
 	}
 
-	var task T
-	if err := proto.Unmarshal(msg.Body, task); err != nil {
+	if err := proto.Unmarshal(msg.Body, taskPtr); err != nil {
 		msg.Nack()
-		return nil, nil, err
+		return nil, err
 	}
-	return &task, msg, nil
+	return msg, nil
 }
 
-func newAzureSBReceiverClient[T proto.Message](
+func newAzureSBReceiverClient(
 	logger *zap.SugaredLogger, broker *Broker, ctx context.Context,
-) (*SubClient[T], error) {
+) (*SubClient, error) {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		return nil, err
@@ -125,23 +124,23 @@ func newAzureSBReceiverClient[T proto.Message](
 		return nil, err
 	}
 
-	return &SubClient[T]{
+	return &SubClient{
 		subscription: subs,
 		logger:       logger,
 		receiver:     receiver,
 	}, nil
 }
 
-func newRabbitMQSubscriberClient[T proto.Message](
+func newRabbitMQSubscriberClient(
 	logger *zap.SugaredLogger, broker *Broker, ctx context.Context,
-) (*SubClient[T], error) {
+) (*SubClient, error) {
 	rabbitConn, err := amqp.Dial(fmt.Sprintf("amqp://%s/", broker.ConnectionString))
 	if err != nil {
 		return nil, err
 	}
 
 	subs := rabbitpubsub.OpenSubscription(rabbitConn, broker.TopicName, nil)
-	return &SubClient[T]{
+	return &SubClient{
 		subscription: subs,
 		logger:       logger,
 		rabbitConn:   rabbitConn,

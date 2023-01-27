@@ -14,7 +14,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type PubClient[T proto.Message] struct {
+type PubClient struct {
 	topic *pubsub.Topic
 
 	ctx        context.Context
@@ -24,18 +24,18 @@ type PubClient[T proto.Message] struct {
 }
 
 // NewPubClient returns an initialized publisher client for the configured broker from the given application config.
-func NewPubClient[T proto.Message](logger *zap.SugaredLogger, broker *Broker, ctx context.Context) (*PubClient[T], error) {
+func NewPubClient(logger *zap.SugaredLogger, broker *Broker, ctx context.Context) (*PubClient, error) {
 	switch broker.Engine {
 	case "azuresb":
-		return newAzureSBSenderClient[T](logger, broker, ctx)
+		return newAzureSBSenderClient(logger, broker, ctx)
 	case "rabbitmq":
-		return newRabbitMQPublisherClient[T](logger, broker, ctx)
+		return newRabbitMQPublisherClient(logger, broker, ctx)
 	}
 	return nil, fmt.Errorf("Unknown engine")
 }
 
 // Close will close all the associated connections of the given publisher client.
-func (clt *PubClient[T]) Close() error {
+func (clt *PubClient) Close() error {
 	if clt == nil {
 		return nil
 	}
@@ -63,7 +63,7 @@ func (clt *PubClient[T]) Close() error {
 }
 
 // SendTask will send a protobuf encoded message representing a worker task across the open pubsub topic.
-func (clt *PubClient[T]) SendTask(task T) error {
+func (clt *PubClient) SendTask(task proto.Message) error {
 	taskMsg, err := proto.Marshal(task)
 	if err != nil {
 		return err
@@ -77,8 +77,8 @@ func (clt *PubClient[T]) SendTask(task T) error {
 	})
 }
 
-func newAzureSBSenderClient[T proto.Message](
-	logger *zap.SugaredLogger, broker *Broker, ctx context.Context) (*PubClient[T], error) {
+func newAzureSBSenderClient(
+	logger *zap.SugaredLogger, broker *Broker, ctx context.Context) (*PubClient, error) {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ func newAzureSBSenderClient[T proto.Message](
 	if err != nil {
 		return nil, err
 	}
-	return &PubClient[T]{
+	return &PubClient{
 		topic:  topic,
 		logger: logger,
 		ctx:    ctx,
@@ -103,16 +103,16 @@ func newAzureSBSenderClient[T proto.Message](
 	}, nil
 }
 
-func newRabbitMQPublisherClient[T proto.Message](
+func newRabbitMQPublisherClient(
 	logger *zap.SugaredLogger, broker *Broker, ctx context.Context,
-) (*PubClient[T], error) {
+) (*PubClient, error) {
 	rabbitConn, err := amqp.Dial(fmt.Sprintf("amqp://%s/", broker.ConnectionString))
 	if err != nil {
 		return nil, err
 	}
 
 	topic := rabbitpubsub.OpenTopic(rabbitConn, broker.TopicName, nil)
-	return &PubClient[T]{
+	return &PubClient{
 		topic:      topic,
 		logger:     logger,
 		ctx:        ctx,

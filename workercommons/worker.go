@@ -11,16 +11,22 @@ import (
 
 	"github.com/fensak-io/gostd/quit"
 	"go.uber.org/zap"
+	"gocloud.dev/pubsub"
 	"google.golang.org/protobuf/proto"
 )
 
-type App[T proto.Message] struct {
+type App struct {
 	Broker          *Broker
 	Logger          *zap.SugaredLogger
-	TaskHandler     TaskHandler[T]
+	TaskHandler     TaskHandler
 	ShutdownTimeout time.Duration
 
-	// Any addiitonal close routine should be handled in the custom close function passed in here.
+	// ReceiveTaskFn is called to receive a task from the Sub client. Ideally this is not necessary, but because
+	// proto.Message is a pointer type, we can't instantiate the struct without knowing what protobuf message we want to
+	// unmarshal to.
+	ReceiveTaskFn func(ctx context.Context, subClt *SubClient) (proto.Message, *pubsub.Message, error)
+
+	// CloseFn is called on close. contain Any additional close routine should be handled in the custom close function passed in here.
 	CloseFn func() error
 }
 
@@ -28,8 +34,8 @@ type App[T proto.Message] struct {
 // handler in the foreground that traps the INT and TERM signals. When the INT or TERM signal is sent to the process,
 // this will start a graceful shutdown of the worker app, waiting up to ShutdownTimeout duration for all the worker
 // threads to stop processing.
-func RunWithSignalHandler[T proto.Message](app *App[T]) (returnErr error) {
-	subscription, err := NewSubClient[T](app.Logger, app.Broker, context.Background())
+func RunWithSignalHandler(app *App) (returnErr error) {
+	subscription, err := NewSubClient(app.Logger, app.Broker, context.Background())
 	if err != nil {
 		return err
 	}
@@ -70,10 +76,7 @@ func RunWithSignalHandler[T proto.Message](app *App[T]) (returnErr error) {
 			// Use a timeout context to avoid blocking the thread on receive. This allows the worker to able to handle shutdown
 			// messages from the main thread.
 			timeout, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-			err := receiveMsgWithTimeout(
-				app.Logger, subscription, app.TaskHandler,
-				timeout, cancel,
-			)
+			err := receiveMsgWithTimeout(app, subscription, timeout, cancel)
 			if err != nil && !errors.Is(err, context.DeadlineExceeded) {
 				errCh <- err
 				return
@@ -119,25 +122,25 @@ func RunWithSignalHandler[T proto.Message](app *App[T]) (returnErr error) {
 	return loopErr
 }
 
-func receiveMsgWithTimeout[T proto.Message](
-	logger *zap.SugaredLogger, subscription *SubClient[T], h TaskHandler[T],
+func receiveMsgWithTimeout(
+	app *App, subscription *SubClient,
 	timeout context.Context, cancel context.CancelFunc,
 ) (returnErr error) {
 	defer cancel()
 
-	task, msg, err := subscription.ReceiveTask(timeout)
+	task, msg, err := app.ReceiveTaskFn(timeout, subscription)
 	if err != nil {
 		// TODO: differentiate fatal error from ignorable errors
 		if !errors.Is(err, context.DeadlineExceeded) {
-			logger.Errorf("Error receiving message from broker: %s", err)
+			app.Logger.Errorf("Error receiving message from broker: %s", err)
 		}
 		return err
 	}
 	// TODO: spawn goroutine for handling the task, but with work pooling to prevent overflowing.
-	if err := h.HandleTaskMsg(task, msg); err != nil {
+	if err := app.TaskHandler.HandleTaskMsg(task, msg); err != nil {
 		// NOTE: we don't halt on task errors so that the worker continues to process other messages.
-		logger.Errorf("Error processing task TODO from broker: %s", err)
+		app.Logger.Errorf("Error processing task TODO from broker: %s", err)
 	}
-	logger.Infof("Successfully processed task TODO")
+	app.Logger.Infof("Successfully processed task TODO")
 	return nil
 }
