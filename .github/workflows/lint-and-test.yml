@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@0ad9a0988b3973e851ab0a07adf248ec2e100376 # v3.3.1
+        uses: golangci/golangci-lint-action@08e2f20817b15149a52b5b3ebe7de50aff2ba8c5 # v3.4.0
         with:
           version: v1.50.1
 
@@ -46,7 +46,7 @@ jobs:
           FENSAK_GOSTD_TFC_TEST_TOKEN: ${{ secrets.FENSAK_GOSTD_TFC_TEST_TOKEN }}
 
       - name: report
-        uses: mikepenz/action-junit-report@c06eeb43cf77da3d290b179c834b2d8725177971 # v3.7.0
+        uses: mikepenz/action-junit-report@7210fead7f92f6395c37241964df3b0f730f5e4e # v3.7.1
         if: always()
         with:
           report_paths: ginkgo_report.xml
