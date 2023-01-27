@@ -20,6 +20,9 @@ type App struct {
 	Logger          *zap.SugaredLogger
 	Port            int
 	ShutdownTimeout time.Duration
+
+	// Any addiitonal close routine should be handled in the custom close function passed in here.
+	CloseFn func() error
 }
 
 // RunWithSignalHandler runs the Gin app described by the App struct in the background, and implements a signal handler
@@ -45,6 +48,16 @@ func RunWithSignalHandler(app *App) (returnErr error) {
 			app.Logger.Debugf("Error shutting down: %s", err)
 			if returnErr == nil {
 				returnErr = err
+			}
+		}
+
+		if app.CloseFn != nil {
+			app.Logger.Debug("Handling additional shutdown tasks")
+			if err := app.CloseFn(); err != nil {
+				app.Logger.Debugf("Error running additional shutdown tasks: %s", err)
+				if returnErr == nil {
+					returnErr = err
+				}
 			}
 		}
 	}()
