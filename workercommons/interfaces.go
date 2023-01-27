@@ -6,6 +6,6 @@ import (
 )
 
 // TaskHandler is the interface that task handlers passed to the worker app should implement.
-type TaskHandler[T proto.Message] interface {
-	HandleTaskMsg(*T, *pubsub.Message) error
+type TaskHandler interface {
+	HandleTaskMsg(proto.Message, *pubsub.Message) error
 }
