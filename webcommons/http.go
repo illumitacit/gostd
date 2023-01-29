@@ -1,4 +1,4 @@
-package gincommons
+package webcommons
 
 import (
 	"context"
@@ -10,13 +10,13 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/fensak-io/gostd/quit"
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+
+	"github.com/fensak-io/gostd/quit"
 )
 
 type App struct {
-	Engine          *gin.Engine
+	Handler         http.Handler
 	Logger          *zap.SugaredLogger
 	Port            int
 	ShutdownTimeout time.Duration
@@ -25,15 +25,15 @@ type App struct {
 	CloseFn func() error
 }
 
-// RunWithSignalHandler runs the Gin app described by the App struct in the background, and implements a signal handler
-// in the foreground that traps the INT and TERM signals. When the INT or TERM signal is sent to the process, this will
-// start a graceful shutdown of the Gin app, waiting up to ShutdownTimeout duration for all Gin threads to stop
-// processing.
+// RunWithSignalHandler runs the http web app described by the App struct in the background, and implements a signal
+// handler in the foreground that traps the INT and TERM signals. When the INT or TERM signal is sent to the process,
+// this will start a graceful shutdown of the http server, waiting up to ShutdownTimeout duration for all http server
+// threads to stop processing.
 func RunWithSignalHandler(app *App) (returnErr error) {
 	listen := fmt.Sprintf(":%d", app.Port)
 	srv := &http.Server{
 		Addr:    listen,
-		Handler: app.Engine,
+		Handler: app.Handler,
 	}
 
 	// Start the server in the background so that we can handle shutdown signals gracefully.
@@ -43,7 +43,7 @@ func RunWithSignalHandler(app *App) (returnErr error) {
 	go func() {
 		defer waiter.Done()
 
-		app.Logger.Debug("Starting Gin server")
+		app.Logger.Debug("Starting Web server")
 		if err := srv.ListenAndServe(); err != http.ErrServerClosed {
 			app.Logger.Debugf("Error shutting down: %s", err)
 			if returnErr == nil {
