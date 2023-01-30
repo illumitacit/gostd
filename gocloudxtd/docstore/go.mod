@@ -1,3 +1,6 @@
+// Ideally we don't need to subpackage this, but this is necessary to avoid circular imports when
+// gostd/gocloudxtd/docstore/mongodb is imported.
+
 module github.com/fensak-io/gostd/gocloudxtd/docstore
 
 go 1.19

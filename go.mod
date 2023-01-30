@@ -9,7 +9,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.1
 	github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus v1.1.4
 	github.com/coreos/go-oidc/v3 v3.5.0
-	github.com/fensak-io/gostd/gocloudxtd/docstore v0.0.0-00010101000000-000000000000
+	github.com/fensak-io/gostd/gocloudxtd/docstore v0.0.0-20230130211716-49fed985dd26
 	github.com/fensak-io/httpzaplog v0.1.0
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-resty/resty/v2 v2.7.0
