@@ -17,3 +17,12 @@ type OIDCProvider struct {
 	// protocol.
 	CallbackURL string `mapstructure:"callbackurl"`
 }
+
+// CSRF represents configuration options for CSRF protection.
+// This can be embedded in a viper compatible config struct.
+type CSRF struct {
+	MaxAge int `mapstructure:"maxage"`
+
+	// Dev determines whether to use dev mode for CSRF validation. When true, disables the secure flag on the CSRF cookie.
+	Dev bool `mapstructure:"dev"`
+}
