@@ -16,8 +16,21 @@ import (
 type sessionDocument struct {
 	ID                   string
 	SerializedAttributes string
-	TTL                  time.Duration
 	DocstoreRevision     any
+
+	// The following are fields used to implement TTL (auto-expiry) for the different backends. Specifically:
+	// - TTLSecondsFromModified is used for CosmosDB, and indicates the number of seconds that the session is live since
+	//   the last time it was modified.
+	//   (https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/time-to-live#set-time-to-live-value-for-a-document)
+	// - ExpiresAt is used for MongoDB and Firestore and indicates the time when the session will expire.
+	//   (https://www.mongodb.com/docs/manual/tutorial/expire-data/#expire-documents-at-a-specific-clock-time)
+	// - ExpiresAtEpoch is used for DynamoDB, and indicates the time that the session expires in unix epoch seconds.
+	//   (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/time-to-live-ttl-before-you-start.html)
+	// NOTE: This package will not automatically configure the necessary indexes/settings for implementing TTL for the
+	// various backend stores. You must configure the data store yourself.
+	TTLSecondsFromModified int `docstore:"ttl"`
+	ExpiresAt              time.Time
+	ExpiresAtEpoch         int64
 }
 
 // SessionDocumentPKeyField is the primary key of the session document entry. This should be used when opening the
@@ -92,12 +105,27 @@ func (s *SessionDocumentStore) Release() error {
 		return err
 	}
 
-	sess := &sessionDocument{
-		ID:                   s.prefix + s.sid,
-		SerializedAttributes: string(data),
-		TTL:                  s.duration,
+	sess := &sessionDocument{ID: s.prefix + s.sid}
+	getErr := s.coll.Get(ctx, sess)
+	if getErr == nil {
+		// Already exists, so update the session. Note that the TTLSecondsFromModified field needs to be updated so that the
+		// expiry time stays constant.
+		newTTL := int(time.Until(sess.ExpiresAt).Seconds())
+		sess.SerializedAttributes = string(data)
+		sess.TTLSecondsFromModified = newTTL
+		return s.coll.Put(ctx, sess)
 	}
-	return s.coll.Put(ctx, sess)
+
+	// Does not exist yet, so create a new one
+	expiresAt := time.Now().Add(s.duration)
+	newSess := &sessionDocument{
+		ID:                     s.prefix + s.sid,
+		SerializedAttributes:   string(data),
+		TTLSecondsFromModified: int(s.duration.Seconds()),
+		ExpiresAt:              expiresAt,
+		ExpiresAtEpoch:         expiresAt.Unix(),
+	}
+	return s.coll.Create(ctx, newSess)
 }
 
 // Flush deletes all session data.
