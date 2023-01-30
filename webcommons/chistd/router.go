@@ -1,4 +1,4 @@
-package webcommons
+package chistd
 
 import (
 	"github.com/fensak-io/httpzaplog"
@@ -7,9 +7,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// NewChiRouterWithDefaultMiddlewares returns a new go-chi router that has a set of recommended default routers
+// NewRouterWithDefaultMiddlewares returns a new go-chi router that has a set of recommended default routers
 // configured.
-func NewChiRouterWithDefaultMiddlewares(logger *zap.Logger) chi.Router {
+func NewRouterWithDefaultMiddlewares(logger *zap.Logger) chi.Router {
 	router := chi.NewRouter()
 	AddDefaultMiddlewares(router, logger)
 	return router
