@@ -2,11 +2,14 @@ module github.com/fensak-io/gostd
 
 go 1.19
 
+replace github.com/fensak-io/gostd/gocloudxtd/docstore => ./gocloudxtd/docstore
+
 require (
 	gitea.com/go-chi/session v0.0.0-20221220005550-e056dc379164
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.1
 	github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus v1.1.4
 	github.com/coreos/go-oidc/v3 v3.5.0
+	github.com/fensak-io/gostd/gocloudxtd/docstore v0.0.0-00010101000000-000000000000
 	github.com/fensak-io/httpzaplog v0.1.0
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-resty/resty/v2 v2.7.0

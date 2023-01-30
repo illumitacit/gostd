@@ -10,6 +10,8 @@ import (
 
 	"gitea.com/go-chi/session"
 	"gocloud.dev/docstore"
+
+	docstorextd "github.com/fensak-io/gostd/gocloudxtd/docstore"
 )
 
 // sessionDocument represents a stored session in the document store.
@@ -168,14 +170,14 @@ func (p *DocStoreProvider) Init(maxlifetime int64, configs string) (err error) {
 		qp.Set("name_field", SessionDocumentPKeyField)
 	case "dynamodb":
 		qp.Set("partition_key", SessionDocumentPKeyField)
-	case "mongo":
+	case "mongo", "mongodb":
 		qp.Set("id_field", SessionDocumentPKeyField)
 	case "mem":
 		parsed.Path = "/" + SessionDocumentPKeyField
 	}
 	parsed.RawQuery = qp.Encode()
 
-	coll, err := docstore.OpenCollection(ctx, parsed.String())
+	coll, err := docstorextd.OpenCollection(ctx, parsed.String())
 	if err != nil {
 		return err
 	}
