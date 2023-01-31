@@ -15,11 +15,14 @@ type Authenticator struct {
 }
 
 // NewAuthenticator instantiates the Authenticator object using the provided configuration options.
-func NewAuthenticator(cfg *OIDCProvider) (*Authenticator, error) {
-	provider, err := oidc.NewProvider(
-		context.Background(),
-		"https://"+cfg.Domain+"/",
-	)
+func NewAuthenticator(ctx context.Context, cfg *OIDCProvider) (*Authenticator, error) {
+	discoveryURL := cfg.IssuerURL
+	if cfg.SkipIssuerVerification {
+		ctx = oidc.InsecureIssuerURLContext(ctx, cfg.IssuerURL)
+		discoveryURL = cfg.DiscoveryURL
+	}
+
+	provider, err := oidc.NewProvider(ctx, discoveryURL)
 	if err != nil {
 		return nil, err
 	}
