@@ -17,7 +17,7 @@ const (
 	OIDCCallbackPath = "/oidc/callback"
 )
 
-type oidcHandlerContext struct {
+type OIDCHandlerContext struct {
 	auth     *webstd.Authenticator
 	logger   *zap.Logger
 	homePath string
@@ -27,21 +27,21 @@ func NewOIDCHandlerContext(
 	auth *webstd.Authenticator,
 	logger *zap.Logger,
 	homePath string,
-) *oidcHandlerContext {
-	return &oidcHandlerContext{auth: auth, logger: logger, homePath: homePath}
+) *OIDCHandlerContext {
+	return &OIDCHandlerContext{auth: auth, logger: logger, homePath: homePath}
 }
 
 // AddOIDCHandlerRoutes will add a group of routes that can be used to implement OIDC client protocol to manage
 // authentication into an existing go-chi based web app. Note that this depends on the following two middlewares:
 // - gitea.com/go-chi/session
 // - github.com/ory/nosurf
-func (h oidcHandlerContext) AddOIDCHandlerRoutes(router chi.Router) {
+func (h OIDCHandlerContext) AddOIDCHandlerRoutes(router chi.Router) {
 	router.Get(OIDCLoginPath, h.oidcLoginHandler)
 	router.Get(OIDCLogoutPath, h.oidcLogoutHandler)
 	router.Get(OIDCCallbackPath, h.oidcCallbackHandler)
 }
 
-func (h oidcHandlerContext) oidcLoginHandler(w http.ResponseWriter, r *http.Request) {
+func (h OIDCHandlerContext) oidcLoginHandler(w http.ResponseWriter, r *http.Request) {
 	stateToken := nosurf.Token(r)
 	http.Redirect(
 		w, r,
@@ -50,7 +50,7 @@ func (h oidcHandlerContext) oidcLoginHandler(w http.ResponseWriter, r *http.Requ
 	)
 }
 
-func (h oidcHandlerContext) oidcLogoutHandler(w http.ResponseWriter, r *http.Request) {
+func (h OIDCHandlerContext) oidcLogoutHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: there needs to be a way to invalidate the auth token, but it looks like logout is dependent on the platform.
 	sess := session.GetSession(r)
 	if err := sess.Destroy(w, r); err != nil {
@@ -66,7 +66,7 @@ func (h oidcHandlerContext) oidcLogoutHandler(w http.ResponseWriter, r *http.Req
 	)
 }
 
-func (h oidcHandlerContext) oidcCallbackHandler(w http.ResponseWriter, r *http.Request) {
+func (h OIDCHandlerContext) oidcCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	logger := h.logger.Sugar()
 	ctx := r.Context()
 
