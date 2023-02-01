@@ -21,7 +21,7 @@ require (
 	github.com/hashicorp/terraform-registry-address v0.1.0
 	github.com/in-toto/in-toto-golang v0.5.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/onsi/ginkgo/v2 v2.7.0
+	github.com/onsi/ginkgo/v2 v2.8.0
 	github.com/onsi/gomega v1.26.0
 	github.com/ory/nosurf v1.2.7
 	github.com/rabbitmq/amqp091-go v1.6.0

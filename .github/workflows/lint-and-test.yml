@@ -41,7 +41,7 @@ jobs:
 
       - name: run tests
         run: |
-          go install github.com/onsi/ginkgo/v2/ginkgo@v2.6.1
+          go install github.com/onsi/ginkgo/v2/ginkgo@v2.8.0
           ginkgo run --junit-report ginkgo_report.xml ./...
         env:
           FENSAK_GOSTD_TFC_TEST_TOKEN: ${{ secrets.FENSAK_GOSTD_TFC_TEST_TOKEN }}
