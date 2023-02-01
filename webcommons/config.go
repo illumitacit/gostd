@@ -23,6 +23,10 @@ type OIDCProvider struct {
 	// true; when SkipIssuerVerification is false, the IssuerURL will be used instead.
 	DiscoveryURL string `mapstructure:"discoveryurl"`
 
+	// AdditionalScopes is the list of Oauth2 scopes to request for the OIDC token. Note that the library will always
+	// request the required "openid" scope.
+	AdditionalScopes []string `mapstructure:"additionalscopes"`
+
 	// CallbackURL is the full URL (including scheme) of the endpoint that handles the access token returned from the OIDC
 	// protocol.
 	CallbackURL string `mapstructure:"callbackurl"`
