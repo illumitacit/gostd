@@ -5,7 +5,7 @@ go 1.19
 replace github.com/fensak-io/gostd/gocloudxtd/docstore => ./..
 
 require (
-	github.com/fensak-io/gostd/gocloudxtd/docstore v0.0.0-20230201045427-d40e686f7cb7
+	github.com/fensak-io/gostd/gocloudxtd/docstore v0.0.0-20230201050459-456cef1bf651
 	gocloud.dev v0.28.0
 	gocloud.dev/docstore/mongodocstore v0.28.0
 )
