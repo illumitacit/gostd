@@ -12,9 +12,14 @@ import (
 )
 
 const (
+	// URL paths
 	OIDCLoginPath    = "/oidc/login"
 	OIDCLogoutPath   = "/oidc/logout"
 	OIDCCallbackPath = "/oidc/callback"
+
+	// Session keys
+	AccessTokenSessionKey = "access_token"
+	UserProfileSessionKey = "profile"
 )
 
 type OIDCHandlerContext struct {
@@ -117,12 +122,12 @@ func (h OIDCHandlerContext) oidcCallbackHandler(w http.ResponseWriter, r *http.R
 	}
 
 	sess := session.GetSession(r)
-	if err := sess.Set("access_token", token.AccessToken); err != nil {
+	if err := sess.Set(AccessTokenSessionKey, token.AccessToken); err != nil {
 		logger.Errorf("Error setting access token on session: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	if err := sess.Set("profile", profile); err != nil {
+	if err := sess.Set(UserProfileSessionKey, profile); err != nil {
 		logger.Errorf("Error setting profile on session: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
