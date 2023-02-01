@@ -32,7 +32,7 @@ func NewAuthenticator(ctx context.Context, cfg *OIDCProvider) (*Authenticator, e
 		ClientSecret: cfg.ClientSecret,
 		RedirectURL:  cfg.CallbackURL,
 		Endpoint:     provider.Endpoint(),
-		Scopes:       []string{oidc.ScopeOpenID, "profile"},
+		Scopes:       append([]string{oidc.ScopeOpenID}, cfg.AdditionalScopes...),
 	}
 
 	return &Authenticator{
