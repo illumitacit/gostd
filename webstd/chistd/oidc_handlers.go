@@ -22,31 +22,33 @@ const (
 	UserProfileSessionKey = "profile"
 )
 
-type OIDCHandlerContext struct {
+type OIDCHandlerContext[T any] struct {
 	auth     *webstd.Authenticator
 	logger   *zap.Logger
 	homePath string
 }
 
-func NewOIDCHandlerContext(
+// NewOIDCHandlerContext returns a new handler context for the OIDC pages. The generic type parameter represents the
+// profile struct to marshal the ID token claims to.
+func NewOIDCHandlerContext[T any](
 	auth *webstd.Authenticator,
 	logger *zap.Logger,
 	homePath string,
-) *OIDCHandlerContext {
-	return &OIDCHandlerContext{auth: auth, logger: logger, homePath: homePath}
+) *OIDCHandlerContext[T] {
+	return &OIDCHandlerContext[T]{auth: auth, logger: logger, homePath: homePath}
 }
 
 // AddOIDCHandlerRoutes will add a group of routes that can be used to implement OIDC client protocol to manage
 // authentication into an existing go-chi based web app. Note that this depends on the following two middlewares:
 // - gitea.com/go-chi/session
 // - github.com/ory/nosurf
-func (h OIDCHandlerContext) AddOIDCHandlerRoutes(router chi.Router) {
+func (h OIDCHandlerContext[T]) AddOIDCHandlerRoutes(router chi.Router) {
 	router.Get(OIDCLoginPath, h.oidcLoginHandler)
 	router.Get(OIDCLogoutPath, h.oidcLogoutHandler)
 	router.Get(OIDCCallbackPath, h.oidcCallbackHandler)
 }
 
-func (h OIDCHandlerContext) oidcLoginHandler(w http.ResponseWriter, r *http.Request) {
+func (h OIDCHandlerContext[T]) oidcLoginHandler(w http.ResponseWriter, r *http.Request) {
 	stateToken := nosurf.Token(r)
 	http.Redirect(
 		w, r,
@@ -55,7 +57,7 @@ func (h OIDCHandlerContext) oidcLoginHandler(w http.ResponseWriter, r *http.Requ
 	)
 }
 
-func (h OIDCHandlerContext) oidcLogoutHandler(w http.ResponseWriter, r *http.Request) {
+func (h OIDCHandlerContext[T]) oidcLogoutHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: there needs to be a way to invalidate the auth token, but it looks like logout is dependent on the platform.
 	sess := session.GetSession(r)
 	if err := sess.Destroy(w, r); err != nil {
@@ -71,7 +73,7 @@ func (h OIDCHandlerContext) oidcLogoutHandler(w http.ResponseWriter, r *http.Req
 	)
 }
 
-func (h OIDCHandlerContext) oidcCallbackHandler(w http.ResponseWriter, r *http.Request) {
+func (h OIDCHandlerContext[T]) oidcCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	logger := h.logger.Sugar()
 	ctx := r.Context()
 
@@ -109,8 +111,7 @@ func (h OIDCHandlerContext) oidcCallbackHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	// TODO: define a concrete struct
-	var profile map[string]interface{}
+	var profile T
 	if err := idToken.Claims(&profile); err != nil {
 		logger.Errorf("Error parsing id token claims: %s", err)
 		http.Redirect(
