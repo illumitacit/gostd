@@ -110,6 +110,7 @@ func (s *SessionDocumentStore) Release() error {
 	sess := &sessionDocument{ID: s.prefix + s.sid}
 	getErr := s.coll.Get(ctx, sess)
 	if getErr == nil {
+		fmt.Printf("UPDATE SESSION %s\n", sess.ID)
 		// Already exists, so update the session. Note that the TTLSecondsFromModified field needs to be updated so that the
 		// expiry time stays constant.
 		newTTL := int(time.Until(sess.ExpiresAt).Seconds())
@@ -117,6 +118,8 @@ func (s *SessionDocumentStore) Release() error {
 		sess.TTLSecondsFromModified = newTTL
 		return s.coll.Put(ctx, sess)
 	}
+
+	fmt.Printf("CREATE SESSION %s\n", sess.ID)
 
 	// Does not exist yet, so create a new one
 	expiresAt := time.Now().Add(s.duration)
