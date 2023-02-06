@@ -16,7 +16,7 @@ func AddStaticRoutes(logger *zap.Logger, router chi.Router, staticFS embed.FS) e
 	sugar := logger.Sugar()
 	sugar.Debug("Setting up static routes")
 
-	router.Handle("/static", http.FileServer(http.FS(staticFS)))
+	router.Handle("/static/*", http.FileServer(http.FS(staticFS)))
 
 	faviconPaths, err := fs.Glob(staticFS, "static/favicons/*")
 	if err != nil {
