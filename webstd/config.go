@@ -1,5 +1,9 @@
 package webstd
 
+import (
+	"time"
+)
+
 // OIDCProvider represents configuration options for the OIDC Provider that handles authentication for the web app.
 // This can be embedded in a viper compatible config struct.
 type OIDCProvider struct {
@@ -30,6 +34,22 @@ type OIDCProvider struct {
 	// CallbackURL is the full URL (including scheme) of the endpoint that handles the access token returned from the OIDC
 	// protocol.
 	CallbackURL string `mapstructure:"callbackurl"`
+}
+
+// Session represents configuration options for the Session object and cookie.
+// This can be embedded in a viper compatible config struct.
+type Session struct {
+	// Lifetime indicates how long a session is valid for.
+	Lifetime time.Duration `mapstructure:"lifetime"`
+
+	// CookieName is the name of the cookie to use to store the session ID on the client side.
+	CookieName string `mapstructure:"cookiename"`
+
+	// CookieSecure determines whether the secure flag should be set on the cookie.
+	CookieSecure bool `mapstructure:"cookiesecure"`
+
+	// CookieSameSiteStr is the string representation of the samesite mode to set on the session cookie.
+	CookieSameSiteStr string `mapstructure:"cookiesamesite"`
 }
 
 // CSRF represents configuration options for CSRF protection.
