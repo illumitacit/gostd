@@ -3,7 +3,7 @@ package chistd
 import (
 	"net/http"
 
-	"gitea.com/go-chi/session"
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-chi/chi/v5"
 	"github.com/ory/nosurf"
 	"go.uber.org/zap"
@@ -23,24 +23,28 @@ const (
 )
 
 type OIDCHandlerContext[T any] struct {
-	auth     *webstd.Authenticator
 	logger   *zap.Logger
+	auth     *webstd.Authenticator
+	sessMgr  *scs.SessionManager
 	homePath string
 }
 
 // NewOIDCHandlerContext returns a new handler context for the OIDC pages. The generic type parameter represents the
 // profile struct to marshal the ID token claims to.
 func NewOIDCHandlerContext[T any](
-	auth *webstd.Authenticator,
 	logger *zap.Logger,
+	auth *webstd.Authenticator,
+	sessMgr *scs.SessionManager,
 	homePath string,
 ) *OIDCHandlerContext[T] {
-	return &OIDCHandlerContext[T]{auth: auth, logger: logger, homePath: homePath}
+	return &OIDCHandlerContext[T]{
+		logger: logger, auth: auth, sessMgr: sessMgr, homePath: homePath,
+	}
 }
 
 // AddOIDCHandlerRoutes will add a group of routes that can be used to implement OIDC client protocol to manage
 // authentication into an existing go-chi based web app. Note that this depends on the following two middlewares:
-// - gitea.com/go-chi/session
+// - github.com/alexedwards/scs/v2
 // - github.com/ory/nosurf
 func (h OIDCHandlerContext[T]) AddOIDCHandlerRoutes(router chi.Router) {
 	router.Get(OIDCLoginPath, h.oidcLoginHandler)
@@ -59,8 +63,8 @@ func (h OIDCHandlerContext[T]) oidcLoginHandler(w http.ResponseWriter, r *http.R
 
 func (h OIDCHandlerContext[T]) oidcLogoutHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: there needs to be a way to invalidate the auth token, but it looks like logout is dependent on the platform.
-	sess := session.GetSession(r)
-	if err := sess.Destroy(w, r); err != nil {
+	ctx := r.Context()
+	if err := h.sessMgr.Destroy(ctx); err != nil {
 		h.logger.Sugar().Errorf("Error clearing session on logout: %s", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -122,17 +126,8 @@ func (h OIDCHandlerContext[T]) oidcCallbackHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	sess := session.GetSession(r)
-	if err := sess.Set(AccessTokenSessionKey, token.AccessToken); err != nil {
-		logger.Errorf("Error setting access token on session: %s", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	if err := sess.Set(UserProfileSessionKey, profile); err != nil {
-		logger.Errorf("Error setting profile on session: %s", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	h.sessMgr.Put(ctx, AccessTokenSessionKey, token.AccessToken)
+	h.sessMgr.Put(ctx, UserProfileSessionKey, profile)
 
 	// Redirect to logged in page.
 	http.Redirect(

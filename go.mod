@@ -5,12 +5,11 @@ go 1.19
 replace github.com/fensak-io/gostd/gocloudxtd/docstore => ./gocloudxtd/docstore
 
 require (
-	gitea.com/go-chi/session v0.0.0-20221220005550-e056dc379164
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.1
 	github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus v1.1.4
 	github.com/Masterminds/sprig/v3 v3.2.3
+	github.com/alexedwards/scs/v2 v2.5.0
 	github.com/coreos/go-oidc/v3 v3.5.0
-	github.com/fensak-io/gostd/gocloudxtd/docstore v0.0.0-20230201050459-456cef1bf651
 	github.com/fensak-io/httpzaplog v0.1.0
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-resty/resty/v2 v2.7.0
@@ -89,7 +88,6 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
-	github.com/unknwon/com v1.0.1 // indirect
 	github.com/zclconf/go-cty v1.12.1 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
