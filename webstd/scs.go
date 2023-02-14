@@ -13,6 +13,14 @@ func SetSessionSettings(
 ) {
 	sugar := logger.Sugar()
 
+	if cfg == nil {
+		sugar.Warn("No session settings provided. Using framework defaults (http only; secure; samesite lax).")
+		sessMgr.Cookie.HttpOnly = true
+		sessMgr.Cookie.Secure = true
+		sessMgr.Cookie.SameSite = http.SameSiteLaxMode
+		return
+	}
+
 	sessMgr.Lifetime = cfg.Lifetime
 	sessMgr.Cookie.Name = cfg.CookieName
 	sessMgr.Cookie.HttpOnly = true
