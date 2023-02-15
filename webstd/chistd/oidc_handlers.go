@@ -18,8 +18,8 @@ const (
 	OIDCCallbackPath = "/oidc/callback"
 
 	// Session keys
-	AccessTokenSessionKey = "access_token"
-	UserProfileSessionKey = "profile"
+	RefreshTokenSessionKey = "refresh_token"
+	UserProfileSessionKey  = "profile"
 )
 
 type OIDCHandlerContext[T any] struct {
@@ -126,7 +126,7 @@ func (h OIDCHandlerContext[T]) oidcCallbackHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	h.sessMgr.Put(ctx, AccessTokenSessionKey, token.AccessToken)
+	h.sessMgr.Put(ctx, RefreshTokenSessionKey, token.RefreshToken)
 	h.sessMgr.Put(ctx, UserProfileSessionKey, profile)
 
 	// Redirect to logged in page.
