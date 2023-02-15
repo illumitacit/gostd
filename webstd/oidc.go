@@ -55,6 +55,16 @@ func (a Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) (
 	return a.Verifier(oidcConfig).Verify(ctx, rawIDToken)
 }
 
+// RefreshIDToken obtains a new OIDC ID token using the provided refresh token.
+func (a Authenticator) RefreshIDToken(ctx context.Context, refreshToken string) (*oidc.IDToken, error) {
+	ts := a.TokenSource(ctx, &oauth2.Token{RefreshToken: refreshToken})
+	token, err := ts.Token()
+	if err != nil {
+		return nil, err
+	}
+	return a.VerifyIDToken(ctx, token)
+}
+
 // LogoutURL returns the logout URL to end the session, if it exists. Note that there is no OIDC standard for RP
 // initiated logout. As such, there is no guarantee that this will always return a valid logout URL. For IdPs where we
 // can not determine a valid logout URL, this will return an empty string.
