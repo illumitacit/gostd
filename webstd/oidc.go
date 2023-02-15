@@ -42,7 +42,7 @@ func NewAuthenticator(ctx context.Context, cfg *OIDCProvider) (*Authenticator, e
 }
 
 // VerifyIDToken verifies that an *oauth2.Token is a valid *oidc.IDToken.
-func (a *Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) (*oidc.IDToken, error) {
+func (a Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) (*oidc.IDToken, error) {
 	rawIDToken, ok := token.Extra("id_token").(string)
 	if !ok {
 		return nil, errors.New("no id_token field in oauth2 token")
@@ -53,4 +53,19 @@ func (a *Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) 
 	}
 
 	return a.Verifier(oidcConfig).Verify(ctx, rawIDToken)
+}
+
+// LogoutURL returns the logout URL to end the session, if it exists. Note that there is no OIDC standard for RP
+// initiated logout. As such, there is no guarantee that this will always return a valid logout URL. For IdPs where we
+// can not determine a valid logout URL, this will return an empty string.
+// NOTE: for now, we only support the `end_session_endpoint` claim, which is used by Azure AD B2C.
+func (a Authenticator) LogoutURL() string {
+	var claims struct {
+		EndSessionEndpoint string `json:"end_session_endpoint"`
+	}
+	if err := a.Claims(&claims); err != nil {
+		// Does not contain the end_session_endpoint in the claims, so return empty string.
+		return ""
+	}
+	return claims.EndSessionEndpoint
 }
