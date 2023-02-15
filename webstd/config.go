@@ -18,12 +18,12 @@ type OIDCProvider struct {
 
 	// SkipIssuerVerification determines whether the issuer URL should be verified against the discovery base URL. This
 	// should ONLY be set to true for OIDC providers that are off-spec, such as Azure where the discovery URL
-	// (/.well-known/oidc-configuration) is different from the issuer URL. When true, the discovery URL must be
+	// (/.well-known/openid-configuration) is different from the issuer URL. When true, the discovery URL must be
 	// provided under the DiscoveryURL config.
 	SkipIssuerVerification bool `mapstructure:"skipissverification"`
 
 	// DiscoveryURL is the full base URL of the discovery page for OIDC. The authenticator will look for the OIDC
-	// configuration under the page DISCOVERY_URL/.well-known/oidc-configuration. Only used if SkipIssuerVerification is
+	// configuration under the page DISCOVERY_URL/.well-known/openid-configuration. Only used if SkipIssuerVerification is
 	// true; when SkipIssuerVerification is false, the IssuerURL will be used instead.
 	DiscoveryURL string `mapstructure:"discoveryurl"`
 
