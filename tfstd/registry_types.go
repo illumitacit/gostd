@@ -20,6 +20,7 @@ type LoginService struct {
 	Authz      string   `json:"authz"`
 	Token      string   `json:"token"`
 	Ports      []int    `json:"ports"`
+	Scopes     []string `json:"scopes"`
 }
 
 // The following three structs represents a response from the module versions endpoint of the registry.
