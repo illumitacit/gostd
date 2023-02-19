@@ -60,3 +60,16 @@ type CSRF struct {
 	// Dev determines whether to use dev mode for CSRF validation. When true, disables the secure flag on the CSRF cookie.
 	Dev bool `mapstructure:"dev"`
 }
+
+// IdP represents configuration options for interacting with the Identity Provider that handles authentication for the
+// web app. This can be embedded in a viper compatible config struct.
+type IdP struct {
+	// Provider represents one of the supported identity providers. Must be one of aadb2c.
+	Provider string `mapstructure:"provider"`
+
+	// The ID of the AAD B2C Tenant. Only used if the provider is set to aadb2c.
+	TenantID string `mapstructure:"tenantid"`
+
+	// The name of the AAD B2C Tenant. Only used if the provider is set to aadb2c.
+	TenantName string `mapstructure:"tenantname"`
+}
