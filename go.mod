@@ -13,9 +13,9 @@ require (
 	github.com/fensak-io/httpzaplog v0.1.0
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-resty/resty/v2 v2.7.0
-	github.com/hashicorp/go-getter/gcs/v2 v2.1.1
-	github.com/hashicorp/go-getter/s3/v2 v2.1.1
-	github.com/hashicorp/go-getter/v2 v2.1.1
+	github.com/hashicorp/go-getter/gcs/v2 v2.2.0
+	github.com/hashicorp/go-getter/s3/v2 v2.2.0
+	github.com/hashicorp/go-getter/v2 v2.2.0
 	github.com/hashicorp/hcl/v2 v2.16.0
 	github.com/hashicorp/terraform-config-inspect v0.0.0-20221020162138-81db043ad408
 	github.com/hashicorp/terraform-registry-address v0.1.0
@@ -71,6 +71,7 @@ require (
 	github.com/huandu/xstrings v1.3.3 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/klauspost/compress v1.15.1 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/copystructure v1.0.0 // indirect
@@ -93,10 +94,10 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/crypto v0.3.0 // indirect
-	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.107.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
