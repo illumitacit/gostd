@@ -1,4 +1,4 @@
-package idp
+package aadb2c
 
 import (
 	"context"
