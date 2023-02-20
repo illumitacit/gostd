@@ -192,7 +192,7 @@ func findMainTenantDomain(ds []graphmodels.Domainable) string {
 	return ""
 }
 
-func (a AADB2C) newUserFromProfile(profile idp.UserProfile) graphmodels.User {
+func (a AADB2C) newUserFromProfile(profile idp.UserProfile) *graphmodels.User {
 	requestBody := graphmodels.NewUser()
 
 	fn := profile.GetFirstName()
