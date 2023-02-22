@@ -63,7 +63,7 @@ func BindIdPCfgFlags(flags *pflag.FlagSet, cfgPrefix string, defaultIdPProvider 
 	clistd.MustBindPFlag(cfgPrefix+"idp.provider", flags.Lookup("idp-provider"))
 
 	flags.String("idp-tenantid", "", "The ID of the AAD B2C Tenant. Only used if the provider is set to aadb2c.")
-	clistd.MustBindPFlag(cfgPrefix+"idp.tenant_id", flags.Lookup("idp-tenantid"))
+	clistd.MustBindPFlag(cfgPrefix+"idp.tenantid", flags.Lookup("idp-tenantid"))
 
 	flags.String("idp-tenantname", "", "The name of the AAD B2C Tenant. Only used if the provider is set to aadb2c.")
 	clistd.MustBindPFlag(cfgPrefix+"idp.tenant_name", flags.Lookup("idp-tenantname"))
