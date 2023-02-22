@@ -37,7 +37,6 @@ func RunWithSignalHandler(app *App) (returnErr error) {
 	}
 
 	// Start the server in the background so that we can handle shutdown signals gracefully.
-	waiterDoneCh := make(chan struct{})
 	waiter := quit.GetWaiter()
 	waiter.Add(1)
 	go func() {
@@ -63,8 +62,8 @@ func RunWithSignalHandler(app *App) (returnErr error) {
 	}()
 	go func() {
 		waiter.Wait()
-		close(waiterDoneCh)
 		app.Logger.Debug("Shutting down server")
+		quit.BroadcastShutdown()
 	}()
 
 	// Wait for interrupt signal to gracefully shutdown the server with a configurable timeout.
@@ -84,7 +83,7 @@ func RunWithSignalHandler(app *App) (returnErr error) {
 	case <-timeout.Done():
 		app.Logger.Errorf("Timed out waiting for server to shutdown.")
 		return fmt.Errorf("timeout")
-	case <-waiterDoneCh:
+	case <-quit.GetQuitChannel():
 		app.Logger.Infof("All services gracefully shutdown.")
 	}
 	return nil
