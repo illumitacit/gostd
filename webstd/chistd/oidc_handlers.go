@@ -18,8 +18,9 @@ const (
 	OIDCCallbackPath = "/oidc/callback"
 
 	// Session keys
-	RefreshTokenSessionKey = "refresh_token"
-	UserProfileSessionKey  = "profile"
+	RefreshTokenSessionKey  = "refresh_token"
+	UserProfileSessionKey   = "profile"
+	ContinueToURLSessionKey = "continue_to"
 )
 
 type OIDCHandlerContext[T any] struct {
@@ -129,10 +130,15 @@ func (h OIDCHandlerContext[T]) oidcCallbackHandler(w http.ResponseWriter, r *htt
 	h.sessMgr.Put(ctx, RefreshTokenSessionKey, token.RefreshToken)
 	h.sessMgr.Put(ctx, UserProfileSessionKey, profile)
 
-	// Redirect to logged in page.
+	// If there is a continue URL recorded in the session, redirect to there.
+	// Otherwise, redirect to the default home page.
+	continueTo, hasContinueTo := h.sessMgr.Get(ctx, ContinueToURLSessionKey).(string)
+	if !hasContinueTo {
+		continueTo = h.homePath
+	}
 	http.Redirect(
 		w, r,
-		h.homePath,
+		continueTo,
 		http.StatusTemporaryRedirect,
 	)
 }
