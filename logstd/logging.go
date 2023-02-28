@@ -47,3 +47,8 @@ func GetLogger(c *Logger) *zap.Logger {
 func GetSugaredLogger(c *Logger) *zap.SugaredLogger {
 	return GetLogger(c).Sugar()
 }
+
+// GetTestLogger returns the zap sugared logger which can be used during testing.
+func GetTestSugaredLogger() *zap.SugaredLogger {
+	return GetSugaredLogger(NewLoggerCfgForTest())
+}
