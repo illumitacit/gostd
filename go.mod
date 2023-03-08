@@ -10,7 +10,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.2.3
 	github.com/alexedwards/scs/v2 v2.5.0
 	github.com/coreos/go-oidc/v3 v3.5.0
-	github.com/fensak-io/httpzaplog v0.1.0
+	github.com/fensak-io/httpzaplog v0.1.1
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/hashicorp/go-getter/gcs/v2 v2.2.0

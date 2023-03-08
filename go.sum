@@ -846,8 +846,8 @@ github.com/fatih/color v1.13.0/go.mod h1:kLAiJbzzSOZDVNGyDpeOxJ47H46qBXwg5ILebYF
 github.com/felixge/httpsnoop v1.0.1/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/felixge/httpsnoop v1.0.2/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/felixge/httpsnoop v1.0.3/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
-github.com/fensak-io/httpzaplog v0.1.0 h1:3Ru73/vfuD3qvRLOeAArnWXtZt3vkyOTfjO6kPCZoVs=
-github.com/fensak-io/httpzaplog v0.1.0/go.mod h1:um6s3OkNZgkCwhfQlD9OplCJmQ+jAEJDX225R9F+kKk=
+github.com/fensak-io/httpzaplog v0.1.1 h1:yD/Ii7UV9TOVjhoKBk2U1/dy27CCq5MBNX6c1nj9uvE=
+github.com/fensak-io/httpzaplog v0.1.1/go.mod h1:um6s3OkNZgkCwhfQlD9OplCJmQ+jAEJDX225R9F+kKk=
 github.com/form3tech-oss/jwt-go v3.2.2+incompatible/go.mod h1:pbq4aXjuKjdthFRnoDwaVPLA+WlJuPGy+QneDUgJi2k=
 github.com/form3tech-oss/jwt-go v3.2.3+incompatible/go.mod h1:pbq4aXjuKjdthFRnoDwaVPLA+WlJuPGy+QneDUgJi2k=
 github.com/fortytw2/leaktest v1.3.0 h1:u8491cBMTQ8ft8aeV+adlcytMZylmA5nnwwkRZjI8vw=
