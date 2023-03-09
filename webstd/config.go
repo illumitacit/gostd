@@ -80,4 +80,5 @@ type IdPProvider string
 
 const (
 	IdPProviderAADB2C IdPProvider = "aadb2c"
+	IdPProviderNopIdP IdPProvider = "nopidp"
 )

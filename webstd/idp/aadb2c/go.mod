@@ -7,7 +7,7 @@ replace github.com/fensak-io/gostd => ./../../../
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.1
 	github.com/alexedwards/scs/v2 v2.5.0
-	github.com/fensak-io/gostd v0.3.0
+	github.com/fensak-io/gostd v0.4.0
 	github.com/microsoftgraph/msgraph-sdk-go v0.54.0
 	github.com/sethvargo/go-password v0.2.0
 	go.uber.org/zap v1.24.0
@@ -20,7 +20,7 @@ require (
 	github.com/cjlapao/common-go v0.0.37 // indirect
 	github.com/coreos/go-oidc/v3 v3.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fensak-io/httpzaplog v0.1.0 // indirect
+	github.com/fensak-io/httpzaplog v0.1.1 // indirect
 	github.com/go-chi/chi/v5 v5.0.7 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.0 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
@@ -45,9 +45,9 @@ require (
 	go.opentelemetry.io/otel/trace v1.11.2 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	golang.org/x/crypto v0.3.0 // indirect
+	golang.org/x/crypto v0.5.0 // indirect
 	golang.org/x/net v0.7.0 // indirect
-	golang.org/x/oauth2 v0.4.0 // indirect
+	golang.org/x/oauth2 v0.5.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
