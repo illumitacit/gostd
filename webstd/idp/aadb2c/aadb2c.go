@@ -46,7 +46,7 @@ func NewAADB2C(
 	sugar := logger.Sugar()
 
 	cred, err := azidentity.NewClientSecretCredential(
-		idpCfg.TenantID,
+		idpCfg.AADTenantID,
 		oidc.ClientID,
 		oidc.ClientSecret,
 		nil,

@@ -73,16 +73,23 @@ type IdP struct {
 	Provider IdPProvider `mapstructure:"provider"`
 
 	// The ID of the AAD B2C Tenant. Only used if the provider is set to aadb2c.
-	TenantID string `mapstructure:"tenantid"`
+	AADTenantID string `mapstructure:"aad_tenantid"`
 
 	// The name of the AAD B2C Tenant. Only used if the provider is set to aadb2c.
-	TenantName string `mapstructure:"tenant_name"`
+	AADTenantName string `mapstructure:"aad_tenant_name"`
+
+	// The name of the Zitadel instance. Only used if the provider is set to zitadel.
+	ZitadelInstanceName string `mapstructure:"zitadel_instance_name"`
+
+	// The base64 encoded value of the JWT key to use for authentication. Only used if the provider is set to zitadel.
+	ZitadelJWTKeyBase64 string `mapstructure:"zitadel_jwt_key_base64"`
 }
 
 // IdPProvider is an enum describing the possible options for the IdP.Provider setting.
 type IdPProvider string
 
 const (
-	IdPProviderAADB2C IdPProvider = "aadb2c"
-	IdPProviderNopIdP IdPProvider = "nopidp"
+	IdPProviderAADB2C  IdPProvider = "aadb2c"
+	IdPProviderZitadel IdPProvider = "zitadel"
+	IdPProviderNopIdP  IdPProvider = "nopidp"
 )
