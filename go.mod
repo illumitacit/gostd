@@ -16,7 +16,7 @@ require (
 	github.com/hashicorp/go-getter/gcs/v2 v2.2.0
 	github.com/hashicorp/go-getter/s3/v2 v2.2.0
 	github.com/hashicorp/go-getter/v2 v2.2.0
-	github.com/hashicorp/hcl/v2 v2.16.1
+	github.com/hashicorp/hcl/v2 v2.16.2
 	github.com/hashicorp/terraform-config-inspect v0.0.0-20221020162138-81db043ad408
 	github.com/hashicorp/terraform-registry-address v0.1.0
 	github.com/in-toto/in-toto-golang v0.7.0
