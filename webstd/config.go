@@ -72,17 +72,23 @@ type IdP struct {
 	// Provider represents one of the supported identity providers.
 	Provider IdPProvider `mapstructure:"provider"`
 
+	AADB2C  *IdPAADB2C  `mapstructure:"aadb2c"`
+	Zitadel *IdPZitadel `mapstructure:"zitadel"`
+}
+
+type IdPAADB2C struct {
 	// The ID of the AAD B2C Tenant. Only used if the provider is set to aadb2c.
-	AADTenantID string `mapstructure:"aad_tenantid"`
-
+	TenantID string `mapstructure:"tenantid"`
 	// The name of the AAD B2C Tenant. Only used if the provider is set to aadb2c.
-	AADTenantName string `mapstructure:"aad_tenant_name"`
+	TenantName string `mapstructure:"tenant_name"`
+}
 
+type IdPZitadel struct {
 	// The name of the Zitadel instance. Only used if the provider is set to zitadel.
-	ZitadelInstanceName string `mapstructure:"zitadel_instance_name"`
+	InstanceName string `mapstructure:"instance_name"`
 
 	// The base64 encoded value of the JWT key to use for authentication. Only used if the provider is set to zitadel.
-	ZitadelJWTKeyBase64 string `mapstructure:"zitadel_jwt_key_base64"`
+	JWTKeyBase64 string `mapstructure:"jwt_key_base64"`
 }
 
 // IdPProvider is an enum describing the possible options for the IdP.Provider setting.

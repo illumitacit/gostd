@@ -65,9 +65,15 @@ func BindIdPCfgFlags(flags *pflag.FlagSet, cfgPrefix string, defaultIdPProvider 
 	flags.String("idp-provider", string(defaultIdPProvider), "The identity provider service that manages authentication to Fensak. Must be one of: aadb2c")
 	clistd.MustBindPFlag(cfgPrefix+"idp.provider", flags.Lookup("idp-provider"))
 
-	flags.String("idp-tenantid", "", "The ID of the AAD B2C Tenant. Only used if the provider is set to aadb2c.")
-	clistd.MustBindPFlag(cfgPrefix+"idp.tenantid", flags.Lookup("idp-tenantid"))
+	flags.String("aadb2c-tenantid", "", "The ID of the AAD B2C Tenant. Only used if the provider is set to aadb2c.")
+	clistd.MustBindPFlag(cfgPrefix+"idp.aadb2c.tenantid", flags.Lookup("aadb2c-tenantid"))
 
-	flags.String("idp-tenantname", "", "The name of the AAD B2C Tenant. Only used if the provider is set to aadb2c.")
-	clistd.MustBindPFlag(cfgPrefix+"idp.tenant_name", flags.Lookup("idp-tenantname"))
+	flags.String("aadb2c-tenantname", "", "The name of the AAD B2C Tenant. Only used if the provider is set to aadb2c.")
+	clistd.MustBindPFlag(cfgPrefix+"idp.aadb2c.tenant_name", flags.Lookup("aadb2c-tenantname"))
+
+	flags.String("zitadel-instance-name", "", "The name of the Zitadel Instance used for hosting users for the app. Only used if the provider is set to zitadel.")
+	clistd.MustBindPFlag(cfgPrefix+"idp.zitadel.instance_name", flags.Lookup("zitadel-instance-name"))
+
+	flags.String("zitadel-jwk-key", "", "The base64 encoded JWT key to use for authenticating to the Zitadel Admin API. Only used if the provider is set to zitadel. Recommended to be set with environment variables.")
+	clistd.MustBindPFlag(cfgPrefix+"idp.zitadel.jwt_key_base64", flags.Lookup("zitadel-jwt-key"))
 }

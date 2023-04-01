@@ -41,13 +41,13 @@ func NewZitadel(
 	auth *webstd.Authenticator,
 	sm *scs.SessionManager,
 ) (*Zitadel, error) {
-	data, err := base64.StdEncoding.DecodeString(idpCfg.ZitadelJWTKeyBase64)
+	data, err := base64.StdEncoding.DecodeString(idpCfg.Zitadel.JWTKeyBase64)
 	if err != nil {
 		return nil, err
 	}
 
-	issuer := fmt.Sprintf("https://%s.zitadel.cloud", idpCfg.ZitadelInstanceName)
-	api := fmt.Sprintf("%s.zitadel.cloud:443", idpCfg.ZitadelInstanceName)
+	issuer := fmt.Sprintf("https://%s.zitadel.cloud", idpCfg.Zitadel.InstanceName)
+	api := fmt.Sprintf("%s.zitadel.cloud:443", idpCfg.Zitadel.InstanceName)
 	client, err := management.NewClient(
 		issuer,
 		api,
