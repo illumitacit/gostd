@@ -5,7 +5,7 @@ go 1.19
 replace github.com/fensak-io/gostd => ./../../../
 
 require (
-	github.com/alexedwards/scs/v2 v2.5.0
+	github.com/alexedwards/scs/v2 v2.5.1
 	github.com/fensak-io/gostd v0.4.2-0.20230401040841-3dd336552ec6
 	github.com/zitadel/oidc v1.13.4
 	github.com/zitadel/zitadel-go/v2 v2.0.12
@@ -24,7 +24,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2 // indirect
 	github.com/ory/nosurf v1.2.7 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
-	go.uber.org/multierr v1.8.0 // indirect
+	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/crypto v0.7.0 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/oauth2 v0.6.0 // indirect
