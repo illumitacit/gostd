@@ -6,7 +6,7 @@ replace github.com/fensak-io/gostd/gocloudxtd/docstore => ./..
 
 require (
 	github.com/fensak-io/gostd/gocloudxtd/docstore v0.0.0-20230201050459-456cef1bf651
-	gocloud.dev v0.28.0
+	gocloud.dev v0.29.0
 	gocloud.dev/docstore/mongodocstore v0.28.0
 )
 
@@ -26,14 +26,14 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.mongodb.org/mongo-driver v1.11.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	golang.org/x/crypto v0.3.0 // indirect
+	golang.org/x/crypto v0.6.0 // indirect
 	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
-	google.golang.org/api v0.103.0 // indirect
-	google.golang.org/genproto v0.0.0-20221201204527-e3fa12d562f3 // indirect
-	google.golang.org/grpc v1.51.0 // indirect
+	google.golang.org/api v0.110.0 // indirect
+	google.golang.org/genproto v0.0.0-20230209215440-0dfe4f8abfcc // indirect
+	google.golang.org/grpc v1.53.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 )
