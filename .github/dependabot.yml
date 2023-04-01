@@ -4,6 +4,26 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+  - package-ecosystem: "gomod"
+    directory: "/webstd/idp/zitadel"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "gomod"
+    directory: "/webstd/idp/aadb2c"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "gomod"
+    directory: "/webstd/idp/nopidp"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "gomod"
+    directory: "/gocloudxtd/docstore/mongodb"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "gomod"
+    directory: "/gocloudxtd/docstore"
+    schedule:
+      interval: "monthly"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
