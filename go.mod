@@ -18,7 +18,7 @@ require (
 	github.com/hashicorp/go-getter/v2 v2.2.0
 	github.com/hashicorp/hcl/v2 v2.16.2
 	github.com/hashicorp/terraform-config-inspect v0.0.0-20221020162138-81db043ad408
-	github.com/hashicorp/terraform-registry-address v0.1.0
+	github.com/hashicorp/terraform-registry-address v0.2.0
 	github.com/in-toto/in-toto-golang v0.7.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/onsi/ginkgo/v2 v2.8.4
@@ -69,7 +69,7 @@ require (
 	github.com/hashicorp/go-safetemp v1.0.0 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734 // indirect
+	github.com/hashicorp/terraform-svchost v0.0.1 // indirect
 	github.com/huandu/xstrings v1.3.3 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
