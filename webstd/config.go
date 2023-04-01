@@ -16,6 +16,10 @@ type OIDCProvider struct {
 	// ClientSecret is the oauth2 application client secret to use for the OIDC protocol.
 	ClientSecret string `mapstructure:"secret"`
 
+	// WithPKCE determines whether PKCE should be used for the code exchange.
+	// See https://www.oauth.com/oauth2-servers/pkce/ for more info.
+	WithPKCE bool `mapstructure:"with_pkce"`
+
 	// SkipIssuerVerification determines whether the issuer URL should be verified against the discovery base URL. This
 	// should ONLY be set to true for OIDC providers that are off-spec, such as Azure where the discovery URL
 	// (/.well-known/openid-configuration) is different from the issuer URL. When true, the discovery URL must be

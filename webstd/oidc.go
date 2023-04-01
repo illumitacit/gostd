@@ -2,7 +2,13 @@ package webstd
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"errors"
+	"fmt"
+	"io"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
@@ -12,6 +18,7 @@ import (
 type Authenticator struct {
 	*oidc.Provider
 	oauth2.Config
+	WithPKCE bool
 }
 
 // NewAuthenticator instantiates the Authenticator object using the provided configuration options.
@@ -38,6 +45,31 @@ func NewAuthenticator(ctx context.Context, cfg *OIDCProvider) (*Authenticator, e
 	return &Authenticator{
 		Provider: provider,
 		Config:   conf,
+		WithPKCE: cfg.WithPKCE,
+	}, nil
+}
+
+// PKCECodeVerifier captures the code verifier string, as well as the hashed string that can be used as the code
+// challenge for the PKCE flow.
+type PKCECodeVerifier struct {
+	Verifier  string
+	Challenge string
+}
+
+// NewCodeVerifier creates cryptographically secure code verification string for the PKCE flow.
+func (a Authenticator) NewCodeVerifier() (PKCECodeVerifier, error) {
+	codeVerifier, err := randomBytesInHex(32)
+	if err != nil {
+		return PKCECodeVerifier{}, fmt.Errorf("Could not create a code verifier: %s", err)
+	}
+	sha2 := sha256.New()
+	if _, err := io.WriteString(sha2, codeVerifier); err != nil {
+		return PKCECodeVerifier{}, fmt.Errorf("Could not write codeVerifier string to sha256: %s", err)
+	}
+	codeChallenge := base64.RawURLEncoding.EncodeToString(sha2.Sum(nil))
+	return PKCECodeVerifier{
+		Verifier:  codeVerifier,
+		Challenge: codeChallenge,
 	}, nil
 }
 
@@ -84,4 +116,13 @@ func (a Authenticator) LogoutURL() string {
 		return ""
 	}
 	return claims.EndSessionEndpoint
+}
+
+func randomBytesInHex(count int) (string, error) {
+	buf := make([]byte, count)
+	_, err := io.ReadFull(rand.Reader, buf)
+	if err != nil {
+		return "", fmt.Errorf("Could not generate %d random bytes: %v", count, err)
+	}
+	return hex.EncodeToString(buf), nil
 }

@@ -20,6 +20,9 @@ func BindOIDCCfgFlags(flags *pflag.FlagSet, cfgPrefix string) {
 	flags.String("oidc-secret", "", "The oauth2 application client secret to use for the OIDC protocol. Recommended to be set using an environment variable.")
 	clistd.MustBindPFlag(cfgPrefix+"oidc.secret", flags.Lookup("oidc-secret"))
 
+	flags.Bool("oidc-with-pkce", false, "Whether the oauth2 flow associated with OIDC should use the PKCE flow.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.with_pkce", flags.Lookup("oidc-with-pkce"))
+
 	flags.Bool("oidc-skip-issuer-verification", false, "Whether the OIDC discovery process should skip verifying the issuer URL against the discovery URL. This should only be used for off-spec providers where the discovery URL is different from the issuer URL, like Azure. When true, --oidc-discovery must be provided.")
 	clistd.MustBindPFlag(cfgPrefix+"oidc.skip_iss_verification", flags.Lookup("oidc-skip-issuer-verification"))
 

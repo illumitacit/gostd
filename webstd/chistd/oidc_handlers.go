@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/ory/nosurf"
 	"go.uber.org/zap"
+	"golang.org/x/oauth2"
 
 	"github.com/fensak-io/gostd/webstd"
 )
@@ -18,9 +19,10 @@ const (
 	OIDCCallbackPath = "/oidc/callback"
 
 	// Session keys
-	RefreshTokenSessionKey  = "refresh_token"
-	UserProfileSessionKey   = "profile"
-	ContinueToURLSessionKey = "continue_to"
+	RefreshTokenSessionKey     = "refresh_token"
+	UserProfileSessionKey      = "profile"
+	ContinueToURLSessionKey    = "continue_to"
+	PKCECodeVerifierSessionKey = "pkce_code_verifier"
 )
 
 type OIDCHandlerContext[T any] struct {
@@ -55,9 +57,27 @@ func (h OIDCHandlerContext[T]) AddOIDCHandlerRoutes(router chi.Router) {
 
 func (h OIDCHandlerContext[T]) oidcLoginHandler(w http.ResponseWriter, r *http.Request) {
 	stateToken := nosurf.Token(r)
+	opts := []oauth2.AuthCodeOption{}
+	if h.auth.WithPKCE {
+		codeVerifier, err := h.auth.NewCodeVerifier()
+		if err != nil {
+			h.logger.Sugar().Errorf("%s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		opts = append(
+			opts,
+			oauth2.SetAuthURLParam("code_challenge_method", "S256"),
+			oauth2.SetAuthURLParam("code_challenge", codeVerifier.Challenge),
+		)
+
+		// Store the verifier in the session so it can be used after the login finishes
+		h.sessMgr.Put(r.Context(), PKCECodeVerifierSessionKey, codeVerifier.Verifier)
+	}
+
 	http.Redirect(
 		w, r,
-		h.auth.AuthCodeURL(stateToken),
+		h.auth.AuthCodeURL(stateToken, opts...),
 		http.StatusTemporaryRedirect,
 	)
 }
@@ -93,8 +113,20 @@ func (h OIDCHandlerContext[T]) oidcCallbackHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
+	opts := []oauth2.AuthCodeOption{}
+	if h.auth.WithPKCE {
+		rawCodeVerifier := h.sessMgr.Get(ctx, PKCECodeVerifierSessionKey)
+		if rawCodeVerifier == nil {
+			logger.Errorf("Required PKCE, but no verifier in session.")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		codeVerifier := rawCodeVerifier.(string)
+		opts = append(opts, oauth2.SetAuthURLParam("code_verifier", codeVerifier))
+	}
+
 	// Exchange an authorization code for a token.
-	token, err := h.auth.Exchange(ctx, r.URL.Query().Get("code"))
+	token, err := h.auth.Exchange(ctx, r.URL.Query().Get("code"), opts...)
 	if err != nil {
 		logger.Errorf("Error exchaning authorization code for a token: %s", err)
 		http.Redirect(
@@ -129,6 +161,9 @@ func (h OIDCHandlerContext[T]) oidcCallbackHandler(w http.ResponseWriter, r *htt
 
 	h.sessMgr.Put(ctx, RefreshTokenSessionKey, token.RefreshToken)
 	h.sessMgr.Put(ctx, UserProfileSessionKey, profile)
+
+	// Clear the PKCE code verifier from the session now that the token is verified
+	h.sessMgr.Put(r.Context(), PKCECodeVerifierSessionKey, nil)
 
 	// If there is a continue URL recorded in the session, redirect to there.
 	// Otherwise, redirect to the default home page.
