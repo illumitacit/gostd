@@ -6,7 +6,7 @@ replace github.com/fensak-io/gostd => ./../../../
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.1
-	github.com/alexedwards/scs/v2 v2.5.0
+	github.com/alexedwards/scs/v2 v2.5.1
 	github.com/fensak-io/gostd v0.4.2-0.20230401040841-3dd336552ec6
 	github.com/microsoftgraph/msgraph-sdk-go v0.60.0
 	github.com/sethvargo/go-password v0.2.0
