@@ -55,8 +55,10 @@ func NewZitadel(
 		zitadel.WithJWTProfileTokenSource(middleware.JWTProfileFromFileData(data)),
 	)
 	return &Zitadel{
-		logger: logger,
-		c:      client,
+		logger:  logger,
+		c:       client,
+		auth:    auth,
+		sessMgr: sm,
 	}, nil
 }
 
