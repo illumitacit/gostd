@@ -54,6 +54,10 @@ func NewZitadel(
 		[]string{oidc.ScopeOpenID, zitadel.ScopeZitadelAPI()},
 		zitadel.WithJWTProfileTokenSource(middleware.JWTProfileFromFileData(data)),
 	)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Zitadel{
 		logger:  logger,
 		c:       client,
