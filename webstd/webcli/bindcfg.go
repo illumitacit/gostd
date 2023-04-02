@@ -74,6 +74,6 @@ func BindIdPCfgFlags(flags *pflag.FlagSet, cfgPrefix string, defaultIdPProvider 
 	flags.String("zitadel-instance-name", "", "The name of the Zitadel Instance used for hosting users for the app. Only used if the provider is set to zitadel.")
 	clistd.MustBindPFlag(cfgPrefix+"idp.zitadel.instance_name", flags.Lookup("zitadel-instance-name"))
 
-	flags.String("zitadel-jwk-key", "", "The base64 encoded JWT key to use for authenticating to the Zitadel Admin API. Only used if the provider is set to zitadel. Recommended to be set with environment variables.")
+	flags.String("zitadel-jwt-key", "", "The base64 encoded JWT key to use for authenticating to the Zitadel Admin API. Only used if the provider is set to zitadel. Recommended to be set with environment variables.")
 	clistd.MustBindPFlag(cfgPrefix+"idp.zitadel.jwt_key_base64", flags.Lookup("zitadel-jwt-key"))
 }
