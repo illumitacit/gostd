@@ -1,4 +1,4 @@
-package aadb2c
+package zitadel
 
 import (
 	"context"
