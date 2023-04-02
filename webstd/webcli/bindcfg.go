@@ -62,7 +62,7 @@ func BindCSRFCfgFlags(flags *pflag.FlagSet, cfgPrefix string) {
 // BindIdPCfgFlags binds the necessary cobra CLI flags for configuring the IdP interaction. This will also make sure to
 // bind the CLI flags to viper as well so that the config is loaded.
 func BindIdPCfgFlags(flags *pflag.FlagSet, cfgPrefix string, defaultIdPProvider webstd.IdPProvider) {
-	flags.String("idp-provider", string(defaultIdPProvider), "The identity provider service that manages authentication to Fensak. Must be one of: aadb2c")
+	flags.String("idp-provider", string(defaultIdPProvider), "The identity provider service that manages authentication to Fensak. Must be one of: aadb2c, zitadel, nopidp")
 	clistd.MustBindPFlag(cfgPrefix+"idp.provider", flags.Lookup("idp-provider"))
 
 	flags.String("aadb2c-tenantid", "", "The ID of the AAD B2C Tenant. Only used if the provider is set to aadb2c.")
