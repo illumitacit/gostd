@@ -8,7 +8,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.2
 	github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus v1.2.1
 	github.com/Masterminds/sprig/v3 v3.2.3
-	github.com/alexedwards/scs/v2 v2.5.0
+	github.com/alexedwards/scs/v2 v2.5.1
 	github.com/coreos/go-oidc/v3 v3.5.0
 	github.com/fensak-io/httpzaplog v0.1.1
 	github.com/go-chi/chi/v5 v5.0.7
