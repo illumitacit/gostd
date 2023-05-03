@@ -16,6 +16,9 @@ type OIDCProvider struct {
 	// ClientSecret is the oauth2 application client secret to use for the OIDC protocol.
 	ClientSecret string `mapstructure:"secret"`
 
+	// RawTokenClientIDs is the list of potential client IDs to expect raw JWT tokens to be provided from.
+	RawTokenClientIDs []string `mapstructure:"raw_token_clientids"`
+
 	// WithPKCE determines whether PKCE should be used for the code exchange.
 	// See https://www.oauth.com/oauth2-servers/pkce/ for more info.
 	WithPKCE bool `mapstructure:"with_pkce"`

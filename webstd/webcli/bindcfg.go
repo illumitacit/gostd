@@ -20,6 +20,9 @@ func BindOIDCCfgFlags(flags *pflag.FlagSet, cfgPrefix string) {
 	flags.String("oidc-secret", "", "The oauth2 application client secret to use for the OIDC protocol. Recommended to be set using an environment variable.")
 	clistd.MustBindPFlag(cfgPrefix+"oidc.secret", flags.Lookup("oidc-secret"))
 
+	flags.StringSlice("oidc-raw-token-clientids", []string{}, "The oauth2 application client ID that is approved for authenticating to the API.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.raw_token_client_ids", flags.Lookup("oidc-raw-token-clientids"))
+
 	flags.Bool("oidc-with-pkce", false, "Whether the oauth2 flow associated with OIDC should use the PKCE flow.")
 	clistd.MustBindPFlag(cfgPrefix+"oidc.with_pkce", flags.Lookup("oidc-with-pkce"))
 
