@@ -18,7 +18,8 @@ import (
 type Authenticator struct {
 	*oidc.Provider
 	oauth2.Config
-	WithPKCE bool
+	WithPKCE          bool
+	RawTokenClientIDs []string
 }
 
 // NewAuthenticator instantiates the Authenticator object using the provided configuration options.
@@ -43,9 +44,10 @@ func NewAuthenticator(ctx context.Context, cfg *OIDCProvider) (*Authenticator, e
 	}
 
 	return &Authenticator{
-		Provider: provider,
-		Config:   conf,
-		WithPKCE: cfg.WithPKCE,
+		Provider:          provider,
+		Config:            conf,
+		WithPKCE:          cfg.WithPKCE,
+		RawTokenClientIDs: cfg.RawTokenClientIDs,
 	}, nil
 }
 
@@ -83,7 +85,6 @@ func (a Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) (
 	oidcConfig := &oidc.Config{
 		ClientID: a.ClientID,
 	}
-
 	return a.Verifier(oidcConfig).Verify(ctx, rawIDToken)
 }
 
@@ -101,6 +102,25 @@ func (a Authenticator) RefreshIDToken(ctx context.Context, refreshToken string) 
 	}
 	idToken, err := a.VerifyIDToken(ctx, token)
 	return rawIDToken, idToken, err
+}
+
+// VerifyRawToken verifies a given raw JWT token string issued by the OIDC provider. This is useful for verifying tokens
+// that are provided through APIs.
+func (a Authenticator) VerifyRawToken(ctx context.Context, rawToken string) (*oidc.IDToken, error) {
+	if len(a.RawTokenClientIDs) == 0 {
+		verifier := a.Verifier(&oidc.Config{SkipClientIDCheck: true})
+		return verifier.Verify(ctx, rawToken)
+	}
+
+	for _, clientID := range a.RawTokenClientIDs {
+		cfg := oidc.Config{ClientID: clientID}
+		verifier := a.Verifier(&cfg)
+		idToken, err := verifier.Verify(ctx, rawToken)
+		if err == nil {
+			return idToken, nil
+		}
+	}
+	return nil, errors.New("invalid id token")
 }
 
 // LogoutURL returns the logout URL to end the session, if it exists. Note that there is no OIDC standard for RP
