@@ -60,6 +60,7 @@ func NewZitadel(
 
 	return &Zitadel{
 		logger:  logger,
+		appURL:  appURL,
 		c:       client,
 		auth:    auth,
 		sessMgr: sm,
