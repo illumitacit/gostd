@@ -35,11 +35,13 @@ func NewAuthenticator(ctx context.Context, cfg *OIDCProvider) (*Authenticator, e
 		return nil, err
 	}
 
+	endpoint := provider.Endpoint()
+	endpoint.AuthStyle = oauth2.AuthStyleInParams
 	conf := oauth2.Config{
 		ClientID:     cfg.ClientID,
 		ClientSecret: cfg.ClientSecret,
 		RedirectURL:  cfg.CallbackURL,
-		Endpoint:     provider.Endpoint(),
+		Endpoint:     endpoint,
 		Scopes:       append([]string{oidc.ScopeOpenID}, cfg.AdditionalScopes...),
 	}
 
