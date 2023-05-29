@@ -132,9 +132,12 @@ func (z Zitadel) GetLogoutURL(ctx context.Context) (string, error) {
 	}
 
 	refreshToken := z.sessMgr.GetString(ctx, chistd.RefreshTokenSessionKey)
-	rawIDToken, _, err := z.auth.RefreshIDToken(ctx, refreshToken)
+	rawIDToken, _, newRefreshToken, err := z.auth.RefreshIDToken(ctx, refreshToken)
 	if err != nil {
 		return "", err
+	}
+	if newRefreshToken != "" {
+		z.sessMgr.Put(ctx, chistd.RefreshTokenSessionKey, newRefreshToken)
 	}
 
 	appURLCopy := z.appURL
