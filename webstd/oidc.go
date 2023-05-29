@@ -91,19 +91,22 @@ func (a Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) (
 }
 
 // RefreshIDToken obtains a new OIDC ID token using the provided refresh token.
-func (a Authenticator) RefreshIDToken(ctx context.Context, refreshToken string) (string, *oidc.IDToken, error) {
+func (a Authenticator) RefreshIDToken(ctx context.Context, refreshToken string) (string, *oidc.IDToken, string, error) {
 	ts := a.TokenSource(ctx, &oauth2.Token{RefreshToken: refreshToken})
 	token, err := ts.Token()
 	if err != nil {
-		return "", nil, err
+		return "", nil, "", err
 	}
 
 	rawIDToken, ok := token.Extra("id_token").(string)
 	if !ok {
-		return "", nil, errors.New("no id_token field in oauth2 token")
+		return "", nil, "", errors.New("no id_token field in oauth2 token")
 	}
 	idToken, err := a.VerifyIDToken(ctx, token)
-	return rawIDToken, idToken, err
+	if err != nil {
+		return "", nil, "", err
+	}
+	return rawIDToken, idToken, token.RefreshToken, nil
 }
 
 // VerifyRawToken verifies a given raw JWT token string issued by the OIDC provider. This is useful for verifying tokens
