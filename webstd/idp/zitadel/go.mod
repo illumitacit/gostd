@@ -15,7 +15,7 @@ require (
 require (
 	github.com/coreos/go-oidc/v3 v3.5.0 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.9.1 // indirect
-	github.com/fensak-io/httpzaplog v0.1.1 // indirect
+	github.com/fensak-io/httpzaplog v0.1.3 // indirect
 	github.com/go-chi/chi/v5 v5.0.7 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
@@ -26,6 +26,7 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/crypto v0.7.0 // indirect
+	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/oauth2 v0.7.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect

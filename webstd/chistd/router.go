@@ -12,6 +12,9 @@ import (
 type DefaultMiddlewareOptions struct {
 	Logger          *zap.Logger
 	ErrorMiddleware func(http.Handler) http.Handler
+	Concise         bool
+	SkipURLParams   []string
+	SkipHeaders     []string
 }
 
 // NewRouterWithDefaultMiddlewares returns a new go-chi router that has a set of recommended default routers
@@ -27,10 +30,9 @@ func AddDefaultMiddlewares(router chi.Router, opts DefaultMiddlewareOptions) {
 	logOpts := &httpzaplog.Options{
 		Logger:          opts.Logger,
 		ErrorMiddleware: opts.ErrorMiddleware,
-
-		// TODO: make configurable
-		Concise:     false,
-		SkipHeaders: nil,
+		Concise:         opts.Concise,
+		SkipURLParams:   opts.SkipURLParams,
+		SkipHeaders:     opts.SkipHeaders,
 	}
 
 	router.Use(middleware.RealIP)

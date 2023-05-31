@@ -151,3 +151,16 @@ func randomBytesInHex(count int) (string, error) {
 	}
 	return hex.EncodeToString(buf), nil
 }
+
+// GetOIDCURLParams returns a list of sensitive URL params in the OIDC flow. This is useful for sanitizing these entries
+// in the request logger.
+func GetOIDCURLParams() []string {
+	return []string{
+		"code",
+		"state",
+		"client_id",
+		"code_challenge",
+		"code_challenge_method",
+		"scope",
+	}
+}
