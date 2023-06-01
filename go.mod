@@ -16,7 +16,7 @@ require (
 	github.com/hashicorp/go-getter/gcs/v2 v2.2.1
 	github.com/hashicorp/go-getter/s3/v2 v2.2.1
 	github.com/hashicorp/go-getter/v2 v2.2.1
-	github.com/hashicorp/hcl/v2 v2.16.2
+	github.com/hashicorp/hcl/v2 v2.17.0
 	github.com/hashicorp/terraform-config-inspect v0.0.0-20221020162138-81db043ad408
 	github.com/hashicorp/terraform-registry-address v0.2.0
 	github.com/in-toto/in-toto-golang v0.7.0
@@ -91,7 +91,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
-	github.com/zclconf/go-cty v1.12.1 // indirect
+	github.com/zclconf/go-cty v1.13.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
