@@ -1,6 +1,9 @@
 package logstd
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+)
 
 // Logger represents configuration options for the zap logger. If this is not set in the config, defaults to a
 // logger optimized for production use.
@@ -10,6 +13,7 @@ type Logger struct {
 	OutputPaths []string `mapstructure:"outputpaths"`
 	Encoding    string   `mapstructure:"encoding"`
 
+	hooks       []func(zapcore.Entry) error
 	atomicLevel zap.AtomicLevel
 }
 
@@ -20,6 +24,10 @@ func (lcfg *Logger) SetAtomicLevel() error {
 	}
 	lcfg.atomicLevel = atomicLevel
 	return nil
+}
+
+func (lcfg *Logger) AddHooks(hooks ...func(zapcore.Entry) error) {
+	lcfg.hooks = hooks
 }
 
 // NewLoggerCfgForTest returns a logging configuration that is optimized for use in a testing environment.

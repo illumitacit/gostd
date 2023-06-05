@@ -40,6 +40,9 @@ func GetSugaredLoggerWithoutConfig() (*zap.SugaredLogger, error) {
 func GetLogger(c *Logger) *zap.Logger {
 	zapC := GetZapConfig(c)
 	logger := zap.Must(zapC.Build())
+	if len(c.hooks) > 0 {
+		logger = logger.WithOptions(zap.Hooks(c.hooks...))
+	}
 	return logger
 }
 
