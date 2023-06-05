@@ -30,7 +30,7 @@ require (
 	go.uber.org/zap v1.24.0
 	gocloud.dev v0.29.0
 	gocloud.dev/pubsub/rabbitpubsub v0.29.0
-	golang.org/x/oauth2 v0.7.0
+	golang.org/x/oauth2 v0.8.0
 	google.golang.org/protobuf v1.30.0
 )
 
