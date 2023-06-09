@@ -27,3 +27,7 @@ func (s NOPIdP) UpdateUser(ctx context.Context, profile idp.UserProfile) error {
 func (s NOPIdP) GetLogoutURL(ctx context.Context) (string, error) {
 	return "", nil
 }
+
+func (s NOPIdP) ResendInviteEmail(ctx context.Context, userID string) error {
+	return nil
+}

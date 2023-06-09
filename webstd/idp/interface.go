@@ -18,6 +18,10 @@ type Service interface {
 
 	// GetLogoutURL will return the session logout URL for the IdP.
 	GetLogoutURL(ctx context.Context) (string, error)
+
+	// ResendInviteEmail will resend the invite email for the user from the IdP. This is useful if the activation link is
+	// expired on the IdP.
+	ResendInviteEmail(ctx context.Context, userID string) error
 }
 
 // UserProfile represents the profile information of a user.
