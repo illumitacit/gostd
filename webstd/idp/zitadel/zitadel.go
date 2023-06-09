@@ -152,3 +152,28 @@ func (z Zitadel) GetLogoutURL(ctx context.Context) (string, error) {
 
 	return idpLogoutURLParsed.String(), nil
 }
+
+func (z Zitadel) ResendInviteEmail(ctx context.Context, userID string) error {
+	emailReq := &pb.GetHumanEmailRequest{UserId: userID}
+	resp, err := z.c.GetHumanEmail(ctx, emailReq)
+	if err != nil {
+		z.logger.Errorf("Error looking up user %s email in IdP: %s", userID, err)
+		return err
+	}
+
+	emailObj := resp.GetEmail()
+	if emailObj == nil {
+		z.logger.Errorf("Error looking up user %s email in IdP: email is empty", userID)
+		return err
+	}
+
+	req := &pb.ResendHumanInitializationRequest{
+		UserId: userID,
+		Email:  emailObj.Email,
+	}
+	if _, err := z.c.ResendHumanInitialization(ctx, req); err != nil {
+		z.logger.Errorf("Error resending initialization email for user %s: %s", userID, err)
+		return err
+	}
+	return nil
+}

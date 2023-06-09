@@ -2,6 +2,7 @@ package aadb2c
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math/rand"
 	"net/url"
@@ -214,4 +215,9 @@ func (a AADB2C) newUserFromProfile(profile idp.UserProfile) *graphmodels.User {
 	requestBody.SetIdentities([]graphmodels.ObjectIdentityable{localId})
 
 	return requestBody
+}
+
+// TODO
+func (a AADB2C) ResendInviteEmail(ctx context.Context, userID string) error {
+	return errors.New("Not implemented")
 }
