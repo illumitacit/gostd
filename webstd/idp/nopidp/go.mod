@@ -4,4 +4,4 @@ go 1.19
 
 replace github.com/fensak-io/gostd => ./../../../
 
-require github.com/fensak-io/gostd v0.5.3-0.20230503215020-10887167a374
+require github.com/fensak-io/gostd v0.5.8-0.20230609175710-dbac7963ae39
