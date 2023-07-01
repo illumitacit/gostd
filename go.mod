@@ -22,7 +22,7 @@ require (
 	github.com/in-toto/in-toto-golang v0.7.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/onsi/ginkgo/v2 v2.9.7
-	github.com/onsi/gomega v1.27.7
+	github.com/onsi/gomega v1.27.8
 	github.com/ory/nosurf v1.2.7
 	github.com/rabbitmq/amqp091-go v1.8.0
 	github.com/spf13/pflag v1.0.5
