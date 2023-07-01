@@ -8,13 +8,13 @@ require (
 	github.com/alexedwards/scs/v2 v2.5.1
 	github.com/fensak-io/gostd v0.5.8-0.20230609175710-dbac7963ae39
 	github.com/zitadel/oidc v1.13.4
-	github.com/zitadel/zitadel-go/v2 v2.0.13
+	github.com/zitadel/zitadel-go/v2 v2.0.14
 	go.uber.org/zap v1.24.0
 )
 
 require (
 	github.com/coreos/go-oidc/v3 v3.5.0 // indirect
-	github.com/envoyproxy/protoc-gen-validate v0.9.1 // indirect
+	github.com/envoyproxy/protoc-gen-validate v1.0.1 // indirect
 	github.com/fensak-io/httpzaplog v0.1.3 // indirect
 	github.com/go-chi/chi/v5 v5.0.8 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.0 // indirect
