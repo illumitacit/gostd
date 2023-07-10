@@ -6,7 +6,7 @@ replace github.com/fensak-io/gostd/gocloudxtd/docstore => ./gocloudxtd/docstore
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.2.2
-	github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus v1.2.1
+	github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus v1.4.0
 	github.com/Masterminds/sprig/v3 v3.2.3
 	github.com/alexedwards/scs/v2 v2.5.1
 	github.com/coreos/go-oidc/v3 v3.6.0
@@ -43,7 +43,7 @@ require (
 	github.com/Azure/azure-amqp-common-go/v3 v3.2.3 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.4.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.2.0 // indirect
-	github.com/Azure/go-amqp v0.18.1 // indirect
+	github.com/Azure/go-amqp v1.0.0 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v0.9.0 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.2.0 // indirect
