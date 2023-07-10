@@ -1,7 +1,9 @@
 package chistd
 
 import (
+	"encoding/gob"
 	"net/http"
+	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-chi/chi/v5"
@@ -12,6 +14,11 @@ import (
 	"github.com/fensak-io/gostd/webstd"
 )
 
+func init() {
+	// Register time.Time to gob so it can be stored in the session
+	gob.Register(time.Time{})
+}
+
 const (
 	// URL paths
 	OIDCLoginPath    = "/oidc/login"
@@ -19,10 +26,12 @@ const (
 	OIDCCallbackPath = "/oidc/callback"
 
 	// Session keys
-	RefreshTokenSessionKey     = "refresh_token"
-	UserProfileSessionKey      = "profile"
-	ContinueToURLSessionKey    = "continue_to"
-	PKCECodeVerifierSessionKey = "pkce_code_verifier"
+	AccessTokenSessionKey       = "access_token"
+	AccessTokenExpirySessionKey = "access_token_expiry"
+	RefreshTokenSessionKey      = "refresh_token"
+	UserProfileSessionKey       = "profile"
+	ContinueToURLSessionKey     = "continue_to"
+	PKCECodeVerifierSessionKey  = "pkce_code_verifier"
 )
 
 type OIDCHandlerContext[T any] struct {
@@ -159,6 +168,8 @@ func (h OIDCHandlerContext[T]) oidcCallbackHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
+	h.sessMgr.Put(ctx, AccessTokenSessionKey, token.AccessToken)
+	h.sessMgr.Put(ctx, AccessTokenExpirySessionKey, token.Expiry)
 	h.sessMgr.Put(ctx, RefreshTokenSessionKey, token.RefreshToken)
 	h.sessMgr.Put(ctx, UserProfileSessionKey, profile)
 
