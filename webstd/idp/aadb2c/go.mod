@@ -7,7 +7,7 @@ replace github.com/fensak-io/gostd => ./../../../
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.3.0
 	github.com/alexedwards/scs/v2 v2.5.1
-	github.com/fensak-io/gostd v0.5.8-0.20230609175710-dbac7963ae39
+	github.com/fensak-io/gostd v0.5.8-0.20230710222842-c64d3fb5961b
 	github.com/microsoftgraph/msgraph-sdk-go v1.8.0
 	github.com/sethvargo/go-password v0.2.0
 	go.uber.org/zap v1.24.0
@@ -18,7 +18,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.3.0 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.0.0 // indirect
 	github.com/cjlapao/common-go v0.0.39 // indirect
-	github.com/coreos/go-oidc/v3 v3.5.0 // indirect
+	github.com/coreos/go-oidc/v3 v3.6.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fensak-io/httpzaplog v0.1.3 // indirect
 	github.com/go-chi/chi/v5 v5.0.8 // indirect

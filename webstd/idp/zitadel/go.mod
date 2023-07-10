@@ -6,14 +6,14 @@ replace github.com/fensak-io/gostd => ./../../../
 
 require (
 	github.com/alexedwards/scs/v2 v2.5.1
-	github.com/fensak-io/gostd v0.5.8-0.20230609175710-dbac7963ae39
+	github.com/fensak-io/gostd v0.5.8-0.20230710222842-c64d3fb5961b
 	github.com/zitadel/oidc v1.13.4
 	github.com/zitadel/zitadel-go/v2 v2.0.14
 	go.uber.org/zap v1.24.0
 )
 
 require (
-	github.com/coreos/go-oidc/v3 v3.5.0 // indirect
+	github.com/coreos/go-oidc/v3 v3.6.0 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.0.1 // indirect
 	github.com/fensak-io/httpzaplog v0.1.3 // indirect
 	github.com/go-chi/chi/v5 v5.0.8 // indirect
