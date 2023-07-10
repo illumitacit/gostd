@@ -166,12 +166,14 @@ func (a AADB2C) GetLogoutURL(ctx context.Context) (string, error) {
 	}
 
 	refreshToken := a.sessMgr.GetString(ctx, chistd.RefreshTokenSessionKey)
-	rawIDToken, _, newRefreshToken, err := a.auth.RefreshIDToken(ctx, refreshToken)
+	rawIDToken, _, newToken, err := a.auth.RefreshIDToken(ctx, refreshToken)
 	if err != nil {
 		return "", err
 	}
-	if newRefreshToken != "" {
-		a.sessMgr.Put(ctx, chistd.RefreshTokenSessionKey, newRefreshToken)
+	a.sessMgr.Put(ctx, chistd.AccessTokenSessionKey, newToken.AccessToken)
+	a.sessMgr.Put(ctx, chistd.AccessTokenExpirySessionKey, newToken.Expiry)
+	if newToken.RefreshToken != "" {
+		a.sessMgr.Put(ctx, chistd.RefreshTokenSessionKey, newToken.RefreshToken)
 	}
 
 	appURLCopy := a.appURL
