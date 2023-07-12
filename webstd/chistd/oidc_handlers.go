@@ -21,6 +21,7 @@ func init() {
 
 const (
 	// URL paths
+	OIDCRegisterPath = "/oidc/register"
 	OIDCLoginPath    = "/oidc/login"
 	OIDCLogoutPath   = "/oidc/logout"
 	OIDCCallbackPath = "/oidc/callback"
@@ -59,20 +60,52 @@ func NewOIDCHandlerContext[T any](
 // - github.com/alexedwards/scs/v2
 // - github.com/ory/nosurf
 func (h OIDCHandlerContext[T]) AddOIDCHandlerRoutes(router chi.Router) {
+	router.Get(OIDCRegisterPath, h.oidcRegisterHandler)
 	router.Get(OIDCLoginPath, h.oidcLoginHandler)
 	router.Get(OIDCLogoutPath, h.oidcLogoutHandler)
 	router.Get(OIDCCallbackPath, h.oidcCallbackHandler)
 }
 
+func (h OIDCHandlerContext[T]) oidcRegisterHandler(w http.ResponseWriter, r *http.Request) {
+	stateToken, opts, err := h.oidcSetupLogin(r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	opts = append(
+		opts,
+		oauth2.SetAuthURLParam("prompt", "create"),
+	)
+
+	http.Redirect(
+		w, r,
+		h.auth.AuthCodeURL(stateToken, opts...),
+		http.StatusTemporaryRedirect,
+	)
+}
+
 func (h OIDCHandlerContext[T]) oidcLoginHandler(w http.ResponseWriter, r *http.Request) {
+	stateToken, opts, err := h.oidcSetupLogin(r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(
+		w, r,
+		h.auth.AuthCodeURL(stateToken, opts...),
+		http.StatusTemporaryRedirect,
+	)
+}
+
+func (h OIDCHandlerContext[T]) oidcSetupLogin(r *http.Request) (string, []oauth2.AuthCodeOption, error) {
 	stateToken := nosurf.Token(r)
 	opts := []oauth2.AuthCodeOption{}
 	if h.auth.WithPKCE {
 		codeVerifier, err := h.auth.NewCodeVerifier()
 		if err != nil {
 			h.logger.Sugar().Errorf("%s", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			return
+			return "", nil, err
 		}
 		opts = append(
 			opts,
@@ -83,12 +116,7 @@ func (h OIDCHandlerContext[T]) oidcLoginHandler(w http.ResponseWriter, r *http.R
 		// Store the verifier in the session so it can be used after the login finishes
 		h.sessMgr.Put(r.Context(), PKCECodeVerifierSessionKey, codeVerifier.Verifier)
 	}
-
-	http.Redirect(
-		w, r,
-		h.auth.AuthCodeURL(stateToken, opts...),
-		http.StatusTemporaryRedirect,
-	)
+	return stateToken, opts, nil
 }
 
 func (h OIDCHandlerContext[T]) oidcLogoutHandler(w http.ResponseWriter, r *http.Request) {
