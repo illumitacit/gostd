@@ -6,7 +6,7 @@ replace github.com/fensak-io/gostd => ./../../../
 
 require (
 	github.com/alexedwards/scs/v2 v2.5.1
-	github.com/fensak-io/gostd v0.5.8-0.20230710222842-c64d3fb5961b
+	github.com/fensak-io/gostd v0.5.10-0.20230720163016-4d6e4513a6fe
 	github.com/zitadel/oidc v1.13.4
 	github.com/zitadel/zitadel-go/v2 v2.0.14
 	go.uber.org/zap v1.24.0

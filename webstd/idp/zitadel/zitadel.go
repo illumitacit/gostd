@@ -20,7 +20,13 @@ import (
 	"github.com/fensak-io/gostd/webstd/idp"
 )
 
+type ZitadelAuthOptions struct {
+	// AutoRefreshIDToken determines whether the zitadel idp manager should attempt to auto refresh the ID token.
+	AutoRefreshIDToken bool
+}
+
 type Zitadel struct {
+	opts   ZitadelAuthOptions
 	logger *zap.SugaredLogger
 	appURL url.URL
 
@@ -35,6 +41,7 @@ type Zitadel struct {
 var _ idp.Service = (*Zitadel)(nil)
 
 func NewZitadel(
+	opts *ZitadelAuthOptions,
 	logger *zap.SugaredLogger,
 	appURL url.URL,
 	idpCfg *webstd.IdP,
@@ -58,7 +65,13 @@ func NewZitadel(
 		return nil, err
 	}
 
+	if opts == nil {
+		opts = &ZitadelAuthOptions{
+			AutoRefreshIDToken: true,
+		}
+	}
 	return &Zitadel{
+		opts:    *opts,
 		logger:  logger,
 		appURL:  appURL,
 		c:       client,
@@ -132,15 +145,23 @@ func (z Zitadel) GetLogoutURL(ctx context.Context) (string, error) {
 		return "", err
 	}
 
-	refreshToken := z.sessMgr.GetString(ctx, chistd.RefreshTokenSessionKey)
-	rawIDToken, _, newToken, err := z.auth.RefreshIDToken(ctx, refreshToken)
-	if err != nil {
-		return "", err
-	}
-	z.sessMgr.Put(ctx, chistd.AccessTokenSessionKey, newToken.AccessToken)
-	z.sessMgr.Put(ctx, chistd.AccessTokenExpirySessionKey, newToken.Expiry)
-	if newToken.RefreshToken != "" {
-		z.sessMgr.Put(ctx, chistd.RefreshTokenSessionKey, newToken.RefreshToken)
+	idTokenStr := z.sessMgr.GetString(ctx, chistd.IDTokenSessionKey)
+	_, verifyErr := z.auth.VerifyIDTokenStr(ctx, idTokenStr)
+	if verifyErr != nil && z.opts.AutoRefreshIDToken {
+		refreshToken := z.sessMgr.GetString(ctx, chistd.RefreshTokenSessionKey)
+		rawIDToken, _, newToken, err := z.auth.RefreshIDToken(ctx, refreshToken)
+		if err != nil {
+			return "", err
+		}
+		z.sessMgr.Put(ctx, chistd.IDTokenSessionKey, rawIDToken)
+		z.sessMgr.Put(ctx, chistd.AccessTokenSessionKey, newToken.AccessToken)
+		z.sessMgr.Put(ctx, chistd.AccessTokenExpirySessionKey, newToken.Expiry)
+		if newToken.RefreshToken != "" {
+			z.sessMgr.Put(ctx, chistd.RefreshTokenSessionKey, newToken.RefreshToken)
+		}
+		idTokenStr = rawIDToken
+	} else if verifyErr != nil {
+		return "", verifyErr
 	}
 
 	appURLCopy := z.appURL
@@ -149,7 +170,7 @@ func (z Zitadel) GetLogoutURL(ctx context.Context) (string, error) {
 	// Refer to the following document for info on these parameters:
 	// https://zitadel.com/docs/guides/integrate/logout
 	qp.Set("post_logout_redirect_uri", appURLCopy.String())
-	qp.Set("id_token_hint", rawIDToken)
+	qp.Set("id_token_hint", idTokenStr)
 	idpLogoutURLParsed.RawQuery = qp.Encode()
 
 	return idpLogoutURLParsed.String(), nil
