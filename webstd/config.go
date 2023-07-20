@@ -75,15 +75,7 @@ type IdP struct {
 	// Provider represents one of the supported identity providers.
 	Provider IdPProvider `mapstructure:"provider"`
 
-	AADB2C  *IdPAADB2C  `mapstructure:"aadb2c"`
 	Zitadel *IdPZitadel `mapstructure:"zitadel"`
-}
-
-type IdPAADB2C struct {
-	// The ID of the AAD B2C Tenant. Only used if the provider is set to aadb2c.
-	TenantID string `mapstructure:"tenantid"`
-	// The name of the AAD B2C Tenant. Only used if the provider is set to aadb2c.
-	TenantName string `mapstructure:"tenant_name"`
 }
 
 type IdPZitadel struct {
@@ -98,7 +90,6 @@ type IdPZitadel struct {
 type IdPProvider string
 
 const (
-	IdPProviderAADB2C  IdPProvider = "aadb2c"
 	IdPProviderZitadel IdPProvider = "zitadel"
 	IdPProviderNopIdP  IdPProvider = "nopidp"
 )
