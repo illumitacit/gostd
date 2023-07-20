@@ -27,6 +27,7 @@ const (
 	OIDCCallbackPath = "/oidc/callback"
 
 	// Session keys
+	IDTokenSessionKey           = "id_token"
 	AccessTokenSessionKey       = "access_token"
 	AccessTokenExpirySessionKey = "access_token_expiry"
 	RefreshTokenSessionKey      = "refresh_token"
@@ -184,6 +185,7 @@ func (h OIDCHandlerContext[T]) oidcCallbackHandler(w http.ResponseWriter, r *htt
 		)
 		return
 	}
+	rawIDToken := token.Extra("id_token").(string)
 
 	var profile T
 	if err := idToken.Claims(&profile); err != nil {
@@ -196,6 +198,7 @@ func (h OIDCHandlerContext[T]) oidcCallbackHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
+	h.sessMgr.Put(ctx, IDTokenSessionKey, rawIDToken)
 	h.sessMgr.Put(ctx, AccessTokenSessionKey, token.AccessToken)
 	h.sessMgr.Put(ctx, AccessTokenExpirySessionKey, token.Expiry)
 	h.sessMgr.Put(ctx, RefreshTokenSessionKey, token.RefreshToken)

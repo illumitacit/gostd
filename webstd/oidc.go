@@ -83,11 +83,15 @@ func (a Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) (
 	if !ok {
 		return nil, errors.New("no id_token field in oauth2 token")
 	}
+	return a.VerifyIDTokenStr(ctx, rawIDToken)
+}
 
+// VerifyIDTokenStr parses and verifies that the given string is a valid ID token.
+func (a Authenticator) VerifyIDTokenStr(ctx context.Context, tokenStr string) (*oidc.IDToken, error) {
 	oidcConfig := &oidc.Config{
 		ClientID: a.ClientID,
 	}
-	return a.Verifier(oidcConfig).Verify(ctx, rawIDToken)
+	return a.Verifier(oidcConfig).Verify(ctx, tokenStr)
 }
 
 // RefreshIDToken obtains a new OIDC ID token using the provided refresh token.
