@@ -11,7 +11,7 @@ require (
 	github.com/alexedwards/scs/v2 v2.5.1
 	github.com/coreos/go-oidc/v3 v3.6.0
 	github.com/fensak-io/httpzaplog v0.1.3
-	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/chi/v5 v5.0.10
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/hashicorp/go-getter/gcs/v2 v2.2.1
 	github.com/hashicorp/go-getter/s3/v2 v2.2.1
