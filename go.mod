@@ -31,7 +31,7 @@ require (
 	gocloud.dev v0.30.0
 	gocloud.dev/pubsub/rabbitpubsub v0.30.0
 	golang.org/x/oauth2 v0.9.0
-	google.golang.org/protobuf v1.30.0
+	google.golang.org/protobuf v1.31.0
 )
 
 require (
