@@ -47,7 +47,7 @@ jobs:
           FENSAK_GOSTD_TFC_TEST_TOKEN: ${{ secrets.FENSAK_GOSTD_TFC_TEST_TOKEN }}
 
       - name: report
-        uses: mikepenz/action-junit-report@baaeba622e27b396105f35ec9ec4ee89ffcbd306 # v3.7.8
+        uses: mikepenz/action-junit-report@75b84e78b3f0aaea7ed7cf8d1d100d7f97f963ec # v4.0.0
         if: always()
         with:
           report_paths: ginkgo_report.xml
