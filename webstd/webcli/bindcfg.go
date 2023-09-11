@@ -10,30 +10,30 @@ import (
 
 // BindOIDCCfgFlags binds the necessary cobra CLI flags for configuring OIDC. This will also make sure to bind the CLI
 // flags to viper as well so that the config is loaded.
-func BindOIDCCfgFlags(flags *pflag.FlagSet, cfgPrefix string) {
-	flags.String("oidc-issuer", "", "The full URL (including domain and path) of the OIDC provider issuer.")
-	clistd.MustBindPFlag(cfgPrefix+"oidc.issuer_url", flags.Lookup("oidc-issuer"))
+func BindOIDCCfgFlags(flags *pflag.FlagSet, flagPrefix, cfgPrefix string) {
+	flags.String(flagPrefix+"oidc-issuer", "", "The full URL (including domain and path) of the OIDC provider issuer.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.issuer_url", flags.Lookup(flagPrefix+"oidc-issuer"))
 
-	flags.String("oidc-clientid", "", "The oauth2 application client ID to use for the OIDC protocol.")
-	clistd.MustBindPFlag(cfgPrefix+"oidc.clientid", flags.Lookup("oidc-clientid"))
+	flags.String(flagPrefix+"oidc-clientid", "", "The oauth2 application client ID to use for the OIDC protocol.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.clientid", flags.Lookup(flagPrefix+"oidc-clientid"))
 
-	flags.String("oidc-secret", "", "The oauth2 application client secret to use for the OIDC protocol. Recommended to be set using an environment variable.")
-	clistd.MustBindPFlag(cfgPrefix+"oidc.secret", flags.Lookup("oidc-secret"))
+	flags.String(flagPrefix+"oidc-secret", "", "The oauth2 application client secret to use for the OIDC protocol. Recommended to be set using an environment variable.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.secret", flags.Lookup(flagPrefix+"oidc-secret"))
 
-	flags.StringSlice("oidc-raw-token-clientids", []string{}, "The oauth2 application client ID that is approved for authenticating to the API.")
-	clistd.MustBindPFlag(cfgPrefix+"oidc.raw_token_client_ids", flags.Lookup("oidc-raw-token-clientids"))
+	flags.StringSlice(flagPrefix+"oidc-raw-token-clientids", []string{}, "The oauth2 application client ID that is approved for authenticating to the API.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.raw_token_client_ids", flags.Lookup(flagPrefix+"oidc-raw-token-clientids"))
 
-	flags.Bool("oidc-with-pkce", false, "Whether the oauth2 flow associated with OIDC should use the PKCE flow.")
-	clistd.MustBindPFlag(cfgPrefix+"oidc.with_pkce", flags.Lookup("oidc-with-pkce"))
+	flags.Bool(flagPrefix+"oidc-with-pkce", false, "Whether the oauth2 flow associated with OIDC should use the PKCE flow.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.with_pkce", flags.Lookup(flagPrefix+"oidc-with-pkce"))
 
-	flags.Bool("oidc-skip-issuer-verification", false, "Whether the OIDC discovery process should skip verifying the issuer URL against the discovery URL. This should only be used for off-spec providers where the discovery URL is different from the issuer URL, like Azure. When true, --oidc-discovery must be provided.")
-	clistd.MustBindPFlag(cfgPrefix+"oidc.skip_iss_verification", flags.Lookup("oidc-skip-issuer-verification"))
+	flags.Bool(flagPrefix+"oidc-skip-issuer-verification", false, "Whether the OIDC discovery process should skip verifying the issuer URL against the discovery URL. This should only be used for off-spec providers where the discovery URL is different from the issuer URL, like Azure. When true, --oidc-discovery must be provided.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.skip_iss_verification", flags.Lookup(flagPrefix+"oidc-skip-issuer-verification"))
 
-	flags.String("oidc-discovery", "", "The full base URL (including domain and path) of the OIDC provider discovery page.")
-	clistd.MustBindPFlag(cfgPrefix+"oidc.discovery_url", flags.Lookup("oidc-discovery"))
+	flags.String(flagPrefix+"oidc-discovery", "", "The full base URL (including domain and path) of the OIDC provider discovery page.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.discovery_url", flags.Lookup(flagPrefix+"oidc-discovery"))
 
-	flags.StringSlice("oidc-scopes", nil, "The list of Oauth2 scopes that should be requested for the OIDC token.")
-	clistd.MustBindPFlag(cfgPrefix+"oidc.additional_scopes", flags.Lookup("oidc-scopes"))
+	flags.StringSlice(flagPrefix+"oidc-scopes", nil, "The list of Oauth2 scopes that should be requested for the OIDC token.")
+	clistd.MustBindPFlag(cfgPrefix+"oidc.additional_scopes", flags.Lookup(flagPrefix+"oidc-scopes"))
 }
 
 // BindSessionCfgFlags binds the necessary cobra CLI flags for configuring the web session. This will also make sure to
