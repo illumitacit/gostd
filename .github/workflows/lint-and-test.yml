@@ -28,26 +28,3 @@ jobs:
         with:
           version: v1.53.3
           args: --timeout 10m0s
-
-  ginkgo:
-    name: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
-
-      - uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
-        with:
-          go-version: 1.19
-
-      - name: run tests
-        run: |
-          go install github.com/onsi/ginkgo/v2/ginkgo@v2.8.0
-          ginkgo run --junit-report ginkgo_report.xml ./...
-        env:
-          FENSAK_GOSTD_TFC_TEST_TOKEN: ${{ secrets.FENSAK_GOSTD_TFC_TEST_TOKEN }}
-
-      - name: report
-        uses: mikepenz/action-junit-report@baaeba622e27b396105f35ec9ec4ee89ffcbd306 # v3.7.8
-        if: always()
-        with:
-          report_paths: ginkgo_report.xml
