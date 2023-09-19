@@ -1,8 +1,8 @@
 package chistd
 
 import (
-	"github.com/fensak-io/gostd/webstd"
 	"github.com/go-chi/chi/v5"
+	"github.com/illumitacit/gostd/webstd"
 )
 
 // AddNosurfMiddleware will add the nosurf middleware into the chi stack.

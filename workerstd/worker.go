@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/fensak-io/gostd/quit"
+	"github.com/illumitacit/gostd/quit"
 	"go.uber.org/zap"
 	"gocloud.dev/pubsub"
 	"google.golang.org/protobuf/proto"
