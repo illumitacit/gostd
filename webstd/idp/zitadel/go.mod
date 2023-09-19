@@ -6,7 +6,7 @@ replace github.com/illumitacit/gostd => ./../../../
 
 require (
 	github.com/alexedwards/scs/v2 v2.5.1
-	github.com/illumitacit/gostd v0.5.10-0.20230720163016-4d6e4513a6fe
+	github.com/illumitacit/gostd v0.6.2-0.20230919134454-ef677c306b53
 	github.com/zitadel/oidc v1.13.4
 	github.com/zitadel/zitadel-go/v2 v2.0.14
 	go.uber.org/zap v1.24.0
