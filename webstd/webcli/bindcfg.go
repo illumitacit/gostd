@@ -3,8 +3,8 @@ package webcli
 import (
 	"time"
 
-	"github.com/fensak-io/gostd/clistd"
-	"github.com/fensak-io/gostd/webstd"
+	"github.com/illumitacit/gostd/clistd"
+	"github.com/illumitacit/gostd/webstd"
 	"github.com/spf13/pflag"
 )
 

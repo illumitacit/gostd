@@ -12,7 +12,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/fensak-io/gostd/quit"
+	"github.com/illumitacit/gostd/quit"
 )
 
 type App struct {

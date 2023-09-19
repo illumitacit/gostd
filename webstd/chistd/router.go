@@ -3,9 +3,9 @@ package chistd
 import (
 	"net/http"
 
-	"github.com/fensak-io/httpzaplog"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/illumitacit/httpzaplog"
 	"go.uber.org/zap"
 )
 

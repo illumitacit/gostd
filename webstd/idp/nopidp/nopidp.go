@@ -3,7 +3,7 @@ package nopidp
 import (
 	"context"
 
-	"github.com/fensak-io/gostd/webstd/idp"
+	"github.com/illumitacit/gostd/webstd/idp"
 )
 
 // NOPIdP is an IdP service provider that does nothing (no-op). This is most useful for testing.

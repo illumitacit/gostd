@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 
-	"github.com/fensak-io/gostd/webstd"
+	"github.com/illumitacit/gostd/webstd"
 )
 
 func init() {

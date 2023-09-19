@@ -15,9 +15,9 @@ import (
 	"github.com/zitadel/zitadel-go/v2/pkg/client/zitadel"
 	pb "github.com/zitadel/zitadel-go/v2/pkg/client/zitadel/management"
 
-	"github.com/fensak-io/gostd/webstd"
-	"github.com/fensak-io/gostd/webstd/chistd"
-	"github.com/fensak-io/gostd/webstd/idp"
+	"github.com/illumitacit/gostd/webstd"
+	"github.com/illumitacit/gostd/webstd/chistd"
+	"github.com/illumitacit/gostd/webstd/idp"
 )
 
 type ZitadelAuthOptions struct {

@@ -1,8 +1,6 @@
-module github.com/fensak-io/gostd
+module github.com/illumitacit/gostd
 
 go 1.19
-
-replace github.com/fensak-io/gostd/gocloudxtd/docstore => ./gocloudxtd/docstore
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.3.0
@@ -10,8 +8,8 @@ require (
 	github.com/Masterminds/sprig/v3 v3.2.3
 	github.com/alexedwards/scs/v2 v2.5.1
 	github.com/coreos/go-oidc/v3 v3.6.0
-	github.com/fensak-io/httpzaplog v0.1.3
 	github.com/go-chi/chi/v5 v5.0.8
+	github.com/illumitacit/httpzaplog v0.2.0
 	github.com/onsi/ginkgo/v2 v2.9.7
 	github.com/onsi/gomega v1.27.8
 	github.com/ory/nosurf v1.2.7
