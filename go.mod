@@ -11,7 +11,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/illumitacit/httpzaplog v0.2.0
 	github.com/ory/nosurf v1.2.7
-	github.com/rabbitmq/amqp091-go v1.8.1
+	github.com/rabbitmq/amqp091-go v1.9.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.15.0
 	go.uber.org/zap v1.26.0
