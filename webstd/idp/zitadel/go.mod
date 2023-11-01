@@ -5,7 +5,7 @@ go 1.19
 replace github.com/illumitacit/gostd => ./../../../
 
 require (
-	github.com/alexedwards/scs/v2 v2.5.1
+	github.com/alexedwards/scs/v2 v2.6.0
 	github.com/illumitacit/gostd v0.6.2-0.20230919134454-ef677c306b53
 	github.com/zitadel/oidc v1.13.4
 	github.com/zitadel/zitadel-go/v2 v2.0.20
